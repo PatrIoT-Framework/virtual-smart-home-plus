@@ -1,6 +1,6 @@
-package io.patriot_framework.virtualsmarthomeplus.house;
+package io.patriot_framework.virtual_smart_home.house;
 
-import io.patriot_framework.virtualsmarthomeplus.house.devices.Device;
+import io.patriot_framework.virtual_smart_home.house.device.Device;
 
 import java.util.ArrayList;
 import java.util.List;

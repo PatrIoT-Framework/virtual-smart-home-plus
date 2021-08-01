@@ -1,4 +1,4 @@
-package io.patriot_framework.virtualsmarthomeplus;
+package io.patriot_framework.virtual_smart_home;
 
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;

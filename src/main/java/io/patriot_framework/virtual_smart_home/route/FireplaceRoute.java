@@ -1,4 +1,4 @@
-package io.patriot_framework.virtualsmarthomeplus.routes;
+package io.patriot_framework.virtual_smart_home.route;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;

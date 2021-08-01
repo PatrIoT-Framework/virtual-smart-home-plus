@@ -1,6 +1,6 @@
-package io.patriot_framework.virtualsmarthomeplus.House.DeviceTests;
+package io.patriot_framework.virtual_smart_home.house.device;
 
-import io.patriot_framework.virtualsmarthomeplus.house.Fireplace;
+import io.patriot_framework.virtual_smart_home.house.Fireplace;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

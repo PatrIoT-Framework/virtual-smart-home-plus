@@ -1,9 +1,7 @@
-package io.patriot_framework.virtualsmarthomeplus.House;
+package io.patriot_framework.virtual_smart_home.house;
 
-import io.patriot_framework.virtualsmarthomeplus.InitialApplication;
-import io.patriot_framework.virtualsmarthomeplus.house.Fireplace;
-import io.patriot_framework.virtualsmarthomeplus.house.House;
-import io.patriot_framework.virtualsmarthomeplus.house.devices.Device;
+import io.patriot_framework.virtual_smart_home.InitialApplication;
+import io.patriot_framework.virtual_smart_home.house.device.Device;
 import org.apache.camel.test.spring.CamelSpringBootRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;

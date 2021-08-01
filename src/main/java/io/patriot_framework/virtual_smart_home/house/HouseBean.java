@@ -1,4 +1,4 @@
-package io.patriot_framework.virtualsmarthomeplus.house;
+package io.patriot_framework.virtual_smart_home.house;
 
 public class HouseBean {
 
