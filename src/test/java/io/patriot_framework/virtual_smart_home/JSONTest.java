@@ -15,7 +15,7 @@ import static org.hamcrest.number.OrderingComparison.lessThan;
 
 @RunWith(CamelSpringBootRunner.class)
 @SpringBootTest(classes = InitialApplication.class)
-class JSONTests {
+class JSONTest {
 
     @Test
     void AcceptingJSONGet() {
