@@ -19,17 +19,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @SpringBootTest(classes = InitialApplication.class)
 public class HouseTest {
 
-    House house = new House("test-house");
+    House house = new House("house");
     Map<String, Device> devices = new ConcurrentHashMap<>();
     Fireplace fireplace = new Fireplace("fireplace");
     Fireplace fireplace2 = new Fireplace("fireplace2");
-
-    @Test
-    public void houseNameTests() {
-        assertThat(house.getHouseName(), equalTo("test-house"));
-        house.setHouseName("new-house");
-        assertThat(house.getHouseName(), equalTo("new-house"));
-    }
 
     @Test
     public void addDevice() {
