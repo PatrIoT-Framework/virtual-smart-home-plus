@@ -2,10 +2,10 @@ package io.patriot_framework.virtual_smart_home.house;
 
 import io.patriot_framework.virtual_smart_home.house.device.Device;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 public final class House {
 
@@ -40,14 +40,10 @@ public final class House {
         this.devices = devices;
     }
 
-    public <T> List<T> getAllDevices(Class<T> type) {
-        ArrayList<T> toReturn = new ArrayList<>();
-
-        for (Device d : devices.values()) {
-            if (type.isInstance(d)) {
-                toReturn.add(type.cast(d));
-            }
-        }
-        return toReturn;
+    public <T> List<T> getDevicesOfType(Class<T> type) {
+        return devices.values().stream()
+                .filter(type::isInstance)
+                .map(type::cast)
+                .collect(Collectors.toList());
     }
 }

@@ -55,11 +55,11 @@ public class HouseTest {
     }
 
     @Test
-    public void getAllDevices() {
+    public void getDevicesOfType() {
         devices.put("fireplace", fireplace);
         devices.put("fireplace2", fireplace2);
         house.setDevices(devices);
         ArrayList<Device> expectedList = new ArrayList<Device>(devices.values());
-        assertThat(house.getAllDevices(Fireplace.class), equalTo(expectedList));
+        assertThat(house.getDevicesOfType(Fireplace.class), equalTo(expectedList));
     }
 }
