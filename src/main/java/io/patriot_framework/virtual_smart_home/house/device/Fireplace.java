@@ -1,8 +1,6 @@
 package io.patriot_framework.virtual_smart_home.house.device;
 
-import io.patriot_framework.virtual_smart_home.house.device.Actuator;
-
-public class Fireplace extends Actuator {
+public final class Fireplace extends Actuator {
 
     public Fireplace(String label) {
         super(label);

@@ -9,8 +9,8 @@ public class Actuator extends Device implements Switchable {
     }
 
     @Override
-    public void switchIt(boolean on) {
-        enabled = on;
+    public void switchIt(boolean enable) {
+        enabled = enable;
     }
 
     @Override
