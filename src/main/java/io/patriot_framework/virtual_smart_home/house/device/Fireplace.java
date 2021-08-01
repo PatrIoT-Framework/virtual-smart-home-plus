@@ -1,4 +1,4 @@
-package io.patriot_framework.virtual_smart_home.house;
+package io.patriot_framework.virtual_smart_home.house.device;
 
 import io.patriot_framework.virtual_smart_home.house.device.Actuator;
 
