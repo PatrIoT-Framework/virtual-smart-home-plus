@@ -28,14 +28,6 @@ public final class House {
         devices.remove(label);
     }
 
-    public String getHouseName() {
-        return houseName;
-    }
-
-    public void setHouseName(String houseName) {
-        this.houseName = houseName;
-    }
-
     public void setDevices(Map<String, Device> devices) {
         this.devices = devices;
     }
@@ -45,5 +37,13 @@ public final class House {
                 .filter(type::isInstance)
                 .map(type::cast)
                 .collect(Collectors.toList());
+    }
+
+    public String getHouseName() {
+        return houseName;
+    }
+
+    public void setHouseName(String houseName) {
+        this.houseName = houseName;
     }
 }

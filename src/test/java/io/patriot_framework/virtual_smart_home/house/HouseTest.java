@@ -52,7 +52,7 @@ public class HouseTest {
         devices.put("fireplace", fireplace);
         devices.put("fireplace2", fireplace2);
         house.setDevices(devices);
-        ArrayList<Device> expectedList = new ArrayList<Device>(devices.values());
+        ArrayList<Device> expectedList = new ArrayList<>(devices.values());
         assertThat(house.getDevicesOfType(Fireplace.class), equalTo(expectedList));
     }
 }
