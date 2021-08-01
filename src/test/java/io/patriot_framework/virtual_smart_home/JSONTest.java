@@ -49,7 +49,7 @@ class JSONTest {
     }
 
     @Test
-    public void getResponseTime() {
+    void getResponseTime() {
         SpringApplication.run(InitialApplication.class);
         given()
                 .when().get("http://localhost:8080/fireplace")
