@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Patriot project
+ * Copyright 2022 Patriot project
  *
  *     Licensed under the Apache License, Version 2.0 (the "License");
  *     you may not use this file except in compliance with the License.
@@ -16,23 +16,9 @@
 
 package io.patriot_framework.virtual_smart_home.house.device;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+public class DifferentDeviceException extends RuntimeException {
 
-/**
- * Representation of fireplace device
- */
-public final class Fireplace extends Actuator {
-
-    public Fireplace(@JsonProperty("label") String label) {
-        super(label);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Fireplace createSimilar(String label) throws IllegalDeviceArgumentException {
-        final Fireplace newFireplace = new Fireplace(label);
-        newFireplace.setEnabled(this.isEnabled());
-        return newFireplace;
+    public DifferentDeviceException(String message) {
+        super(message);
     }
 }

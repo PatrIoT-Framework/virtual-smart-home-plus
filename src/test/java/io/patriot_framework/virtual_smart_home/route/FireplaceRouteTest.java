@@ -98,13 +98,23 @@ class FireplaceRouteTest extends DeviceRouteBase {
     }
 
     @Test
-    void postRequestConflict() {
+    void postRequestConflict(){
         super.postRequestConflict(fireplaceEndpoint, defaultFireplaceJson);
     }
 
     @Test
-    void postRequestStatusCode201() {
+    void postRequestStatusCode201(){
         super.postRequestStatusCode201(fireplaceEndpoint, defaultFireplaceJson);
+    }
+
+    @Test
+    void postRequestBodyWithoutLabel() {
+        super.postRequestBodyWithoutLabel(fireplaceEndpoint, defaultFireplaceJson);
+    }
+
+    @Test
+    void postRequestBodyWithRedundantAttribute() throws JSONException {
+        super.postRequestBodyWithRedundantAttribute(fireplaceEndpoint,defaultFireplaceJson);
     }
 
     @Test
@@ -126,8 +136,27 @@ class FireplaceRouteTest extends DeviceRouteBase {
     }
 
     @Test
-    void putRequestStatusCode200() {
+    void putRequestStatusCode200() throws JSONException {
         super.putRequestStatusCode200(fireplaceEndpoint, defaultFireplaceJson);
+    }
+
+    @Test
+    void putRequestPathAndBodyLabelDifferStatusCode200() throws JSONException {
+        super.putRequestPathAndBodyLabelDifferStatusCode200(fireplaceEndpoint, defaultFireplaceJson);
+    }
+
+    @Test
+    void putRequestPathAndBodyLabelDiffer() throws JSONException {
+        super.putRequestPathAndBodyLabelDiffer(fireplaceEndpoint, defaultFireplaceJson);
+    }
+    @Test
+    void putRequestDifferentDeviceType() throws JSONException {
+        super.putRequestDifferentDeviceType(fireplaceEndpoint, defaultFireplaceJson);
+    }
+
+    @Test
+    void putRequestNonExistingDevice() {
+        super.putRequestNonExistingDevice(fireplaceEndpoint, defaultFireplaceJson);
     }
 
     @Test
@@ -143,10 +172,12 @@ class FireplaceRouteTest extends DeviceRouteBase {
         given()
                 .contentType(ContentType.JSON)
                 .body(enabledFireplace.toString())
-                .put(fireplaceEndpoint);
+                .pathParam("label", enabledFireplace.get("label"))
+                .put(fireplaceEndpoint + "/{label}");
 
         given()
-                .when().get(fireplaceEndpoint + "/" + defaultFireplaceJson.getString("label"))
+                .pathParam("label", enabledFireplace.get("label"))
+                .when().get(fireplaceEndpoint + "/{label}")
                 .then().body(Matchers.equalTo(enabledFireplace.toString()));
     }
 
@@ -157,7 +188,7 @@ class FireplaceRouteTest extends DeviceRouteBase {
     }
 
     @Test
-    void patchRequestStatusCode200() {
+    void patchRequestStatusCode200() throws JSONException {
         super.patchRequestStatusCode200(fireplaceEndpoint, defaultFireplaceJson);
     }
 
@@ -171,6 +202,12 @@ class FireplaceRouteTest extends DeviceRouteBase {
     void deleteRequestStatusCode200() throws JSONException {
         super.deleteRequestStatusCode200(fireplaceEndpoint, defaultFireplaceJson);
     }
+
+    @Test
+    void deleteRequestNonExistingDevice() {
+        super.deleteRequestNonExistingDevice(fireplaceEndpoint);
+    }
+
 
     @Test
     void simpleDeleteRequest() throws JSONException {

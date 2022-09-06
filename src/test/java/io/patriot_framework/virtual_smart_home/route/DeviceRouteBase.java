@@ -73,7 +73,8 @@ public class DeviceRouteBase {
                 .post(endpoint);
 
         given()
-                .when().get(endpoint + "/" + body.getString("label"))
+                .pathParam("label", body.get("label"))
+                .when().get(endpoint + "/{label}")
                 .then().body(Matchers.equalTo(body.toString()));
     }
 
@@ -81,7 +82,7 @@ public class DeviceRouteBase {
     void postRequestWithoutBody(String endpoint) {
         given()
                 .when().post(endpoint)
-                .then().statusCode(Response.SC_BAD_REQUEST); // 400
+                .then().statusCode(Response.SC_UNSUPPORTED_MEDIA_TYPE); // 415
     }
 
     void postRequestWithInvalidJsonBody(String endpoint, JSONObject body) {
@@ -97,7 +98,7 @@ public class DeviceRouteBase {
                 .contentType(ContentType.TEXT)
                 .body("body")
                 .when().post(endpoint)
-                .then().statusCode(Response.SC_BAD_REQUEST); // 400
+                .then().statusCode(Response.SC_UNSUPPORTED_MEDIA_TYPE); // 415
     }
 
     void postRequestConflict(String endpoint, JSONObject body) {
@@ -121,6 +122,25 @@ public class DeviceRouteBase {
                 .then().statusCode(Response.SC_CREATED);
     }
 
+    void postRequestBodyWithoutLabel(String endpoint, JSONObject body) {
+        body.remove("label");
+        given()
+                .contentType(ContentType.JSON)
+                .body(body.toString())
+                .when().post(endpoint)
+                .then().statusCode(Response.SC_BAD_REQUEST);
+    }
+
+    void postRequestBodyWithRedundantAttribute(String endpoint, JSONObject body) throws JSONException {
+        body.put("redundant", 42);
+        body.remove("label");
+        given()
+                .contentType(ContentType.JSON)
+                .body(body.toString())
+                .when().post(endpoint)
+                .then().statusCode(Response.SC_BAD_REQUEST);
+    }
+
     void simplePostRequest(String endpoint, JSONObject body) throws JSONException {
         given()
                 .contentType(ContentType.JSON)
@@ -136,7 +156,8 @@ public class DeviceRouteBase {
     // === PUT ===
     void putRequestWithoutBody(String endpoint) {
         given()
-                .when().put(endpoint)
+                .pathParam("label", "label")
+                .when().put(endpoint + "/{label}")
                 .then().statusCode(Response.SC_BAD_REQUEST); // 400
     }
 
@@ -144,11 +165,12 @@ public class DeviceRouteBase {
         given()
                 .contentType(ContentType.JSON)
                 .body(body.toString())
-                .when().put(endpoint)
+                .pathParam("label", "label")
+                .when().put(endpoint + "/{label}")
                 .then().statusCode(Response.SC_BAD_REQUEST); // 400
     }
 
-    void putRequestStatusCode200(String endpoint, JSONObject body) {
+    void putRequestStatusCode200(String endpoint, JSONObject body) throws JSONException {
         given()
                 .contentType(ContentType.JSON)
                 .body(body.toString())
@@ -157,18 +179,68 @@ public class DeviceRouteBase {
         given()
                 .contentType(ContentType.JSON)
                 .body(body.toString())
-                .when().put(endpoint)
+                .pathParam("label", body.get("label"))
+                .when().put(endpoint + "/{label}")
                 .then().statusCode(Response.SC_OK);
+    }
+
+    void putRequestPathAndBodyLabelDifferStatusCode200(String endpoint, JSONObject body) throws JSONException {
+        given()
+                .contentType(ContentType.JSON)
+                .body(body.toString())
+                .post(endpoint);
+
+        JSONObject newBody = new JSONObject(body.toString());
+        newBody.put("label", "newUniqueLabel");
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(body.toString())
+                .pathParam("label", body.get("label"))
+                .when().put(endpoint + "/{label}")
+                .then().statusCode(Response.SC_OK);
+    }
+
+    void putRequestPathAndBodyLabelDiffer(String endpoint, JSONObject body) throws JSONException {
+        given()
+                .contentType(ContentType.JSON)
+                .body(body.toString())
+                .post(endpoint);
+
+        JSONObject wrongLabelBody = new JSONObject(body.toString());
+        wrongLabelBody.put("label", "newUniqueLabel");
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(wrongLabelBody.toString())
+                .pathParam("label", body.get("label"))
+                .when().put(endpoint + "/{label}")
+                .then().body(Matchers.equalTo(body.toString()));
+    }
+
+    void putRequestDifferentDeviceType(String endpoint, JSONObject body) {
+        //todo: This test will be possible after another device POST endpoint will be implemented.
+        // put device with same label but different class
+    }
+
+    void putRequestNonExistingDevice(String endpoint, JSONObject body) {
+        given()
+                .contentType(ContentType.JSON)
+                .body(body.toString())
+                .pathParam("label", "nonExistingLabel")
+                .when().put(endpoint + "/{label}")
+                .then().statusCode(Response.SC_NOT_FOUND);
     }
 
     // === PATCH ===
     void patchRequestWithoutBody(String endpoint) {
         given()
-                .when().patch(endpoint)
+                .pathParam("label", "label")
+                .when().patch(endpoint + "/{label}")
                 .then().statusCode(Response.SC_BAD_REQUEST); // 400
     }
 
-    void patchRequestStatusCode200(String endpoint, JSONObject body) {
+    void patchRequestStatusCode200(String endpoint, JSONObject body) throws JSONException {
         given()
                 .contentType(ContentType.JSON)
                 .body(body.toString())
@@ -177,7 +249,8 @@ public class DeviceRouteBase {
         given()
                 .contentType(ContentType.JSON)
                 .body(body.toString())
-                .when().patch(endpoint)
+                .pathParam("label", body.get("label"))
+                .when().patch(endpoint + "/{label}")
                 .then().statusCode(Response.SC_OK);
     }
 
@@ -185,8 +258,9 @@ public class DeviceRouteBase {
     void deleteRequestWithoutQueryParam(String endpoint) {
         given()
                 .when().delete(endpoint)
-                .then().statusCode(Response.SC_BAD_REQUEST); // 400
+                .then().statusCode(Response.SC_NOT_FOUND); // 404
     }
+
 
     void deleteRequestStatusCode200(String endpoint, JSONObject body) throws JSONException {
         given()
@@ -195,9 +269,17 @@ public class DeviceRouteBase {
                 .post(endpoint);
 
         given()
-                .queryParam("label", body.getString("label"))
-                .when().delete(endpoint)
+                .pathParam("label", body.get("label"))
+                .when().delete(endpoint + "/{label}")
                 .then().statusCode(Response.SC_OK);
+    }
+
+    void deleteRequestNonExistingDevice(String endpoint) {
+        given()
+                .contentType(ContentType.JSON)
+                .pathParam("label", "nonExistingLabel")
+                .when().delete(endpoint + "/{label}")
+                .then().statusCode(Response.SC_NOT_FOUND);
     }
 
     void simpleDeleteRequest(String endpoint, JSONObject body) throws JSONException {
@@ -207,8 +289,8 @@ public class DeviceRouteBase {
                 .post(endpoint);
 
         given()
-                .param("label", body.get("label"))
-                .delete(endpoint);
+                .pathParam("label", body.get("label"))
+                .delete(endpoint + "/{label}");
 
         given()
                 .param("label", body.get("label"))

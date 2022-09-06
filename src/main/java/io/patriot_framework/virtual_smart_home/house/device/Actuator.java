@@ -21,7 +21,7 @@ import org.apache.logging.log4j.LogManager;
 /**
  * Simple Device type with ability to manipulate state (enabled/disabled) of {@code Device}
  */
-public class Actuator extends Device {
+public abstract class Actuator extends Device {
 
     public static final Logger LOGGER = LogManager.getLogger();
     private boolean enabled = false;

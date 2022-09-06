@@ -29,11 +29,15 @@ public class DeviceRoute extends HouseRoute {
     @Override
     public void configure() throws Exception {
         rest(getRoute())
-                .get()
-                    .produces(MediaType.APPLICATION_JSON_VALUE)
-                    .route()
-                    .process(exchange -> exchange.getMessage().setBody(house.getDevices()))
-                    .endRest();
+            .get()
+                .description("Returns devices in the house")
+                .outType(house.getDevices().getClass())
+                .responseMessage().code(200).message("List of devices present in the house returned")
+                    .endResponseMessage()
+                .produces(MediaType.APPLICATION_JSON_VALUE)
+                .route()
+                .process(exchange -> exchange.getMessage().setBody(house.getDevices()))
+            .endRest();
     }
 
     @Override

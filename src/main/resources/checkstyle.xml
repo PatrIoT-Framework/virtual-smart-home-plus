@@ -22,6 +22,7 @@
 
 <module name="Checker">
 
+    <module name="SuppressWarningsFilter"/>
     <module name="TreeWalker">
 
         <!-- Checks for Javadoc comments.                              -->
@@ -107,15 +108,17 @@
         </module>
         <module name="RightCurly"/>
 
-	<!-- Checks for whitespaces.					  -->
-	<!-- See https://checkstyle.sourceforge.io/config_whitespace.html -->
-	<module name="WhitespaceAround"/>
+        <!-- Checks for whitespaces.					                  -->
+        <!-- See https://checkstyle.sourceforge.io/config_whitespace.html -->
+        <module name="WhitespaceAround"/>
 
         <!-- Checks for miscellaneous code style criteria.          -->
         <!-- See https://checkstyle.sourceforge.io/config_misc.html -->
         <module name="ArrayTypeStyle"/>
         <module name="CommentsIndentation"/>
-	<module name="Indentation"/>
+        <module name="Indentation"/>
+        <module name="SuppressWarningsHolder"/>
+        <module name="SuppressWarnings"/>
     </module>
 
     <!-- Checks whether files end with a new line.                        -->

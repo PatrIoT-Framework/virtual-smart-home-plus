@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
+import io.patriot_framework.virtual_smart_home.house.device.DifferentDeviceException;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 import javax.management.openmbean.KeyAlreadyExistsException;
@@ -92,6 +93,8 @@ public final class House {
      * @param device instance of new device with given label
      * @throws IllegalArgumentException if one of the parameters is null
      * @throws NoSuchElementException if house doesn't contains device with given label
+     * @throws io.patriot_framework.virtual_smart_home.house.device.DifferentDeviceException if
+     * updating with different device
      */
     public void updateDevice(String label, Device device) throws IllegalArgumentException, NoSuchElementException {
         if (label == null) {
@@ -100,10 +103,16 @@ public final class House {
         if (device == null) {
             throw new IllegalArgumentException("Device parameter can't be null");
         }
-        if (!devices.containsKey(label)) {
+
+        final Device origDevice = devices.get(label);
+        if (origDevice == null) {
             throw new NoSuchElementException(String.format("Device with label: %s is not present in the house", label));
         }
-        final Device origDevice = devices.put(label, device);
+        if (!origDevice.equals(device)) {
+            throw new DifferentDeviceException("Updating with different device");
+        }
+
+        devices.put(label, device);
         LOGGER.debug(String.format("At house:%s device with label:%s updated. "
                     + "(Device:%s replaced by:%s", houseName, label, origDevice, device));
     }

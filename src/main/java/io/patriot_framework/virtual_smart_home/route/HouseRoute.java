@@ -33,14 +33,17 @@ public class HouseRoute extends BaseRoute {
     @Override
     public void configure() throws Exception {
         rest(getRoute())
-                .get()
-                    .produces(MediaType.APPLICATION_JSON_VALUE)
-                    .route()
-                    .process(exchange -> exchange.getMessage().setBody(house))
-                    .endRest();
+            .get()
+                .description("Returns basic house info")
+                .outType(House.class)
+                .responseMessage().code(200).message("House object with basic info returned").endResponseMessage()
+                .produces(MediaType.APPLICATION_JSON_VALUE)
+                .route()
+                .process(exchange -> exchange.getMessage().setBody(house))
+            .endRest();
     }
 
     protected String getRoute() {
-        return "house/";
+        return "/house/";
     }
 }

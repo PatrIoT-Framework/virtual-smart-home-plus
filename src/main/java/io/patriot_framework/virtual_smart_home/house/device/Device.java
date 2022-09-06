@@ -18,6 +18,9 @@ package io.patriot_framework.virtual_smart_home.house.device;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiModelProperty.AccessMode;
+import java.util.Objects;
 
 /**
  * Main representation of the device used in {@code House}
@@ -25,12 +28,25 @@ import org.apache.logging.log4j.LogManager;
 public abstract class Device {
 
     public static final Logger LOGGER = LogManager.getLogger();
+    @ApiModelProperty(accessMode = AccessMode.READ_WRITE)
     private final String label;
 
-    public Device(String label) {
+    public Device(String label) throws IllegalDeviceArgumentException {
+        if (label == null) {
+            throw new IllegalDeviceArgumentException("Label of the device can't be null");
+        }
         this.label = label;
         LOGGER.debug(String.format("Created new device with label \"%s\"", label));
     }
+
+    /**
+     * Returns copy of this object with specified label.
+     *
+     * @param label label of the new fireplace
+     * @return new fireplace with given label, other attributes will be same as in this object
+     * @throws IllegalDeviceArgumentException if label is null
+     */
+    public abstract Device createSimilar(String label) throws IllegalDeviceArgumentException;
 
     /**
      * Getter for device label
@@ -39,5 +55,27 @@ public abstract class Device {
      */
     public String getLabel() {
         return label;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 59 * hash + Objects.hashCode(this.label);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Device other = (Device) obj;
+        return Objects.equals(this.label, other.label);
     }
 }

@@ -34,12 +34,19 @@ public class BaseRoute extends RouteBuilder {
     private String port;
     @Value("${server.host}")
     private String host;
+    @Value("${api.title}")
+    private String apiTitle;
+    private final String apiVersion = "0.0.1";
+    private final String apiContextPath = "/api-doc";
 
     @Override
     public void configure() throws Exception {
         restConfiguration()
-                .component("servlet")
-                .host(host).port(port)
-                .bindingMode(RestBindingMode.json);
+            .component("servlet")
+            .host(host).port(port)
+            .clientRequestValidation(true)
+            .bindingMode(RestBindingMode.json)
+            .apiContextPath(apiContextPath)
+            .apiProperty("api.title", apiTitle).apiProperty("api.version", apiVersion);
     }
 }
