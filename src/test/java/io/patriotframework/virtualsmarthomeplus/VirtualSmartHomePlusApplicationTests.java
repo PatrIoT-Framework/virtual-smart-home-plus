@@ -9,5 +9,4 @@ class VirtualSmartHomePlusApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }
