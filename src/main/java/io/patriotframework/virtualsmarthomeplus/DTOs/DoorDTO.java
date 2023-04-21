@@ -1,7 +1,5 @@
 package io.patriotframework.virtualsmarthomeplus.DTOs;
 
-public class DoorDTO {
-    private String label;
+public class DoorDTO extends AbstractDeviceDTO {
     private String status;
-    private Boolean enabled;
 }

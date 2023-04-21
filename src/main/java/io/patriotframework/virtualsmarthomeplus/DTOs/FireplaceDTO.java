@@ -1,7 +1,5 @@
 package io.patriotframework.virtualsmarthomeplus.DTOs;
 
-public class FireplaceDTO {
-    private String label;
+public class FireplaceDTO extends AbstractDeviceDTO {
     private String status;
-    private Boolean enabled;
 }
