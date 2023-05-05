@@ -1,9 +1,12 @@
 package io.patriotframework.virtualsmarthomeplus.house;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import io.patriotframework.virtualsmarthomeplus.DTOs.DeviceDTO;
+import io.patriotframework.virtualsmarthomeplus.Mappers.DeviceMapper;
 import io.patriotframework.virtualsmarthomeplus.house.devices.Device;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.management.openmbean.KeyAlreadyExistsException;
@@ -21,6 +24,8 @@ import java.util.stream.Collectors;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class House {
 
+    @Autowired
+    DeviceMapper deviceMapper;
     private static final Logger LOGGER = LoggerFactory.getLogger(House.class);
     private final Map<String, Device> devices = new ConcurrentHashMap<>();
 
@@ -50,11 +55,12 @@ public class House {
      * @return instance of device with given label, null if device is not present in the house
      * @throws IllegalArgumentException if label is null
      */
-    public Device getDevice(String label) throws IllegalArgumentException {
+    public DeviceDTO getDevice(String label) throws IllegalArgumentException {
         if(label == null) {
             throw new IllegalArgumentException("Label can't be null.");
         }
-        return devices.get(label);
+        //return deviceMapper.deviceToDto(devices.get(label));
+        return deviceMapper.map(devices.get(label));
     }
 
     /**

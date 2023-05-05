@@ -2,6 +2,7 @@ package io.patriotframework.virtualsmarthomeplus.controllers;
 
 import io.patriotframework.virtualsmarthomeplus.APIRoutes;
 import io.patriotframework.virtualsmarthomeplus.APIVersions;
+import io.patriotframework.virtualsmarthomeplus.DTOs.DeviceDTO;
 import io.patriotframework.virtualsmarthomeplus.house.House;
 import io.patriotframework.virtualsmarthomeplus.house.devices.Device;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +37,9 @@ public class DeviceController {
     }
 
     @GetMapping(DEVICE_ID_ROUTE)
-    public Device getDevice(@PathVariable String label, @PathVariable String apiVersion) {
+    public DeviceDTO getDevice(@PathVariable String label, @PathVariable String apiVersion) {
         if(apiVersion.equals(APIVersions.V0_1)) {
-            Device retrievedDevice = house.getDevice(label);
+            DeviceDTO retrievedDevice = house.getDevice(label);
             if(retrievedDevice == null) {
                 throw new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "device with given label not found" // 404

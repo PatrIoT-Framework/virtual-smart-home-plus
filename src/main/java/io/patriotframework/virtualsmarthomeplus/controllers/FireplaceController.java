@@ -1,11 +1,10 @@
 package io.patriotframework.virtualsmarthomeplus.controllers;
 
 import io.patriotframework.virtualsmarthomeplus.APIRoutes;
+import io.patriotframework.virtualsmarthomeplus.DTOs.DeviceDTO;
+import io.patriotframework.virtualsmarthomeplus.Mappers.DeviceMapper;
 import io.patriotframework.virtualsmarthomeplus.house.House;
-import io.patriotframework.virtualsmarthomeplus.house.devices.Device;
-import io.patriotframework.virtualsmarthomeplus.house.devices.finalDevices.Door;
 import io.patriotframework.virtualsmarthomeplus.house.devices.finalDevices.Fireplace;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -15,9 +14,9 @@ import org.springframework.web.bind.annotation.*;
 public class FireplaceController extends FinalDeviceHandling {
     private static final String FIREPLACE_ID_ROUTE = APIRoutes.FIREPLACE_ROUTE + "{label}";
 
-    @Autowired
-    FireplaceController(House house) {
-        super(house);
+
+    FireplaceController(House house, DeviceMapper AbstractDeviceDTO) {
+        super(house, AbstractDeviceDTO);
     }
 
     /**
@@ -27,7 +26,7 @@ public class FireplaceController extends FinalDeviceHandling {
      * @return Fireplace if present in the house
      */
     @GetMapping(FIREPLACE_ID_ROUTE)
-    public Device getFireplace(@PathVariable String label, @PathVariable String apiVersion) {
+    public DeviceDTO getFireplace(@PathVariable String label, @PathVariable String apiVersion) {
         return handleGet(label, Fireplace.class, apiVersion);
     }
 
@@ -38,7 +37,7 @@ public class FireplaceController extends FinalDeviceHandling {
      * @return fireplace added to the house
      */
     @PostMapping(APIRoutes.FIREPLACE_ROUTE)
-    public Device postFireplace(@RequestBody Door device, @PathVariable String apiVersion) {
+    public DeviceDTO postFireplace(@RequestBody Fireplace device, @PathVariable String apiVersion) {
         return handlePost(device, apiVersion);
     }
 
@@ -49,7 +48,7 @@ public class FireplaceController extends FinalDeviceHandling {
      * @return fireplace updated or added to the house
      */
     @PutMapping(APIRoutes.FIREPLACE_ROUTE)
-    public Device putFireplace(@RequestBody Door device, @PathVariable String apiVersion) {
+    public DeviceDTO putFireplace(@RequestBody Fireplace device, @PathVariable String apiVersion) {
         return handlePut(device, apiVersion);
     }
 

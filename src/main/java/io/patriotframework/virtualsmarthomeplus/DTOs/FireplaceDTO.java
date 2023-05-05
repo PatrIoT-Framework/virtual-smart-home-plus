@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter @Setter @NoArgsConstructor
-public class FireplaceDTO extends AbstractDeviceDTO {
+public class FireplaceDTO extends DeviceDTO {
+    private String deviceType = "Fireplace";
     private String status;
+
 }
