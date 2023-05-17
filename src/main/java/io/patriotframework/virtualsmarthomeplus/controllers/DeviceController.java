@@ -26,7 +26,7 @@ public class DeviceController {
     }
 
     @GetMapping(APIRoutes.DEVICE_ROUTE)
-    public ArrayList<Device> getDevices(@PathVariable String apiVersion) {
+    public ArrayList<DeviceDTO> getDevices(@PathVariable String apiVersion) {
         if(apiVersion.equals(APIVersions.V0_1)) {
             return new ArrayList<>((house.getDevicesOfType(Device.class).values()));
         }

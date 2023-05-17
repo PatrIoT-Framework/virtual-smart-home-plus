@@ -37,14 +37,14 @@ public class FinalDeviceHandling {
      */
     public DeviceDTO handleGet(String label, Class<? extends Device> deviceClass, String apiVersion) {
         if(apiVersion.equals(APIVersions.V0_1)) {
-            final Device retrievedDevice = house.getDevicesOfType(deviceClass).get(label);
+            final DeviceDTO retrievedDevice = house.getDevicesOfType(deviceClass).get(label);
 
             if (retrievedDevice == null) {
                 throw new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "device with given label not found" // 404
                 );
             }
-            return deviceMapper.map(retrievedDevice);
+            return retrievedDevice;
         }
 
         throw new ResponseStatusException(
@@ -61,7 +61,7 @@ public class FinalDeviceHandling {
      */
     public DeviceDTO handlePost(Device device, String apiVersion) {
         if(apiVersion.equals(APIVersions.V0_1)) {
-            final Device checkForConflict = house
+            final DeviceDTO checkForConflict = house
                     .getDevicesOfType(device.getClass())
                     .get(device.getLabel());
             if (checkForConflict != null) {
@@ -88,7 +88,7 @@ public class FinalDeviceHandling {
      */
     public DeviceDTO handlePut(Device device, String apiVersion) {
         if(apiVersion.equals(APIVersions.V0_1)) {
-            final Device deviceInHouse = house
+            final DeviceDTO deviceInHouse = house
                     .getDevicesOfType(device.getClass())
                     .get(device.getLabel());
             if (deviceInHouse == null) {
@@ -116,7 +116,7 @@ public class FinalDeviceHandling {
      */
     public String handleDelete(String label, Class<? extends Device> deviceClass, String apiVersion) {
         if(apiVersion.equals(APIVersions.V0_1)) {
-            final Device retrievedDevice = house.getDevicesOfType(deviceClass).get(label);
+            final DeviceDTO retrievedDevice = house.getDevicesOfType(deviceClass).get(label);
 
             if (retrievedDevice == null) {
                 throw new ResponseStatusException(

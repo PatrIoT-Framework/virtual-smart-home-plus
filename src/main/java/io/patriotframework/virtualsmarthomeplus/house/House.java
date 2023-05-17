@@ -6,15 +6,12 @@ import io.patriotframework.virtualsmarthomeplus.Mappers.DeviceMapper;
 import io.patriotframework.virtualsmarthomeplus.house.devices.Device;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.management.openmbean.KeyAlreadyExistsException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -24,10 +21,13 @@ import java.util.stream.Collectors;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class House {
 
-    @Autowired
     DeviceMapper deviceMapper;
     private static final Logger LOGGER = LoggerFactory.getLogger(House.class);
     private final Map<String, Device> devices = new ConcurrentHashMap<>();
+
+    public House(DeviceMapper deviceMapper) {
+        this.deviceMapper = deviceMapper;
+    }
 
     /**
      * Puts new device to the house object.
@@ -110,12 +110,14 @@ public class House {
     /**
      * Provides devices of certain type which are stored in house.
      *
-     * @param deviceOfType type of requested devices
-     * @return set of devices of requested type, Empty set if such device does not exist
+     * @param deviceType type of requested devices
+     * @return map of labels and devices of requested type, Empty set if such device does not exist
      */
-    public HashMap<String, Device> getDevicesOfType(Class<? extends Device> deviceOfType) {
-        return (HashMap<String, Device>) devices.values().stream()
-                .filter(x -> x.getClass().equals(deviceOfType))
-                .collect(Collectors.toMap(Device::getLabel, Function.identity()));
+    public Map<String, DeviceDTO> getDevicesOfType(Class<? extends Device> deviceType) {
+        Map<String, DeviceDTO> res = devices.entrySet().stream()
+                .filter(x -> deviceType.isAssignableFrom(x.getValue().getClass()))
+                .collect(Collectors.toMap(Map.Entry::getKey, e -> deviceMapper.map(e.getValue())));
+        System.out.println(res);
+        return res;
     }
 }
