@@ -2,8 +2,10 @@ package io.patriotframework.virtualsmarthomeplus.controllers;
 
 import io.patriotframework.virtualsmarthomeplus.APIRoutes;
 import io.patriotframework.virtualsmarthomeplus.APIVersions;
+import io.patriotframework.virtualsmarthomeplus.DTOs.HouseDTO;
+import io.patriotframework.virtualsmarthomeplus.Mapper.DTOMapper;
 import io.patriotframework.virtualsmarthomeplus.house.House;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,10 +21,11 @@ import org.springframework.web.server.ResponseStatusException;
 public class HouseController {
 
     private final House house;
+    private final DTOMapper houseMapper;
 
-    @Autowired
-    HouseController(House house) {
+    HouseController(House house, DTOMapper houseMapper) {
         this.house = house;
+        this.houseMapper = houseMapper;
     }
 
 
@@ -33,9 +36,9 @@ public class HouseController {
      * @return house with it`s devices
      */
     @GetMapping(APIRoutes.HOUSE_ROUTE)
-    public House getHouse(@PathVariable String apiVersion) {
+    public HouseDTO getHouse(@PathVariable String apiVersion) {
         if (apiVersion.equals(APIVersions.V0_1)) {
-            return house;
+            return houseMapper.map(house);
         }
 
         throw new ResponseStatusException(

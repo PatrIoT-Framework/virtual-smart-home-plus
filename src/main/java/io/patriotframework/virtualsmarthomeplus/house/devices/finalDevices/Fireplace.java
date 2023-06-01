@@ -8,7 +8,6 @@ import io.patriotframework.virtualsmarthomeplus.house.devices.Device;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * Representation of fireplace device.
  */
@@ -17,7 +16,6 @@ public class Fireplace extends Device {
 
     private Boolean onFire = false;
     private static final Logger LOGGER = LoggerFactory.getLogger(House.class);
-
     public static final String ON_FIRE = "on_fire";
     public static final String EXTINGUISHED = "extinguished";
 

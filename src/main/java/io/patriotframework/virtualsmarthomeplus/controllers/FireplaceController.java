@@ -2,10 +2,11 @@ package io.patriotframework.virtualsmarthomeplus.controllers;
 
 import io.patriotframework.virtualsmarthomeplus.APIRoutes;
 import io.patriotframework.virtualsmarthomeplus.DTOs.DeviceDTO;
-import io.patriotframework.virtualsmarthomeplus.Mappers.DeviceMapper;
+import io.patriotframework.virtualsmarthomeplus.DTOs.FireplaceDTO;
+import io.patriotframework.virtualsmarthomeplus.Mapper.DTOMapper;
 import io.patriotframework.virtualsmarthomeplus.house.House;
-import io.patriotframework.virtualsmarthomeplus.house.devices.finalDevices.Fireplace;
 import org.springframework.web.bind.annotation.*;
+import javax.validation.Valid;
 
 /**
  * Handles the POST, GET, PUT and DELETE requests on Fireplace route: {@link APIRoutes#FIREPLACE_ROUTE}
@@ -15,7 +16,7 @@ public class FireplaceController extends FinalDeviceHandling {
     private static final String FIREPLACE_ID_ROUTE = APIRoutes.FIREPLACE_ROUTE + "{label}";
 
 
-    FireplaceController(House house, DeviceMapper AbstractDeviceDTO) {
+    FireplaceController(House house, DTOMapper AbstractDeviceDTO) {
         super(house, AbstractDeviceDTO);
     }
 
@@ -27,7 +28,7 @@ public class FireplaceController extends FinalDeviceHandling {
      */
     @GetMapping(FIREPLACE_ID_ROUTE)
     public DeviceDTO getFireplace(@PathVariable String label, @PathVariable String apiVersion) {
-        return handleGet(label, Fireplace.class, apiVersion);
+        return handleGet(label, FireplaceDTO.class, apiVersion);
     }
 
     /**
@@ -37,7 +38,7 @@ public class FireplaceController extends FinalDeviceHandling {
      * @return fireplace added to the house
      */
     @PostMapping(APIRoutes.FIREPLACE_ROUTE)
-    public DeviceDTO postFireplace(@RequestBody Fireplace device, @PathVariable String apiVersion) {
+    public DeviceDTO postFireplace(@Valid @RequestBody FireplaceDTO device, @PathVariable String apiVersion) {
         return handlePost(device, apiVersion);
     }
 
@@ -48,7 +49,7 @@ public class FireplaceController extends FinalDeviceHandling {
      * @return fireplace updated or added to the house
      */
     @PutMapping(APIRoutes.FIREPLACE_ROUTE)
-    public DeviceDTO putFireplace(@RequestBody Fireplace device, @PathVariable String apiVersion) {
+    public DeviceDTO putFireplace(@Valid @RequestBody FireplaceDTO device, @PathVariable String apiVersion) {
         return handlePut(device, apiVersion);
     }
 
@@ -60,6 +61,6 @@ public class FireplaceController extends FinalDeviceHandling {
      */
     @DeleteMapping(FIREPLACE_ID_ROUTE)
     public String deleteFireplace(@PathVariable String label, @PathVariable String apiVersion) {
-        return handleDelete(label, Fireplace.class, apiVersion);
+        return handleDelete(label, FireplaceDTO.class, apiVersion);
     }
 }

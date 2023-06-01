@@ -4,7 +4,6 @@ import io.patriotframework.virtualsmarthomeplus.APIRoutes;
 import io.patriotframework.virtualsmarthomeplus.APIVersions;
 import io.patriotframework.virtualsmarthomeplus.DTOs.DeviceDTO;
 import io.patriotframework.virtualsmarthomeplus.house.House;
-import io.patriotframework.virtualsmarthomeplus.house.devices.Device;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +13,9 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 
 
-
+/**
+ * Handles the GET, requests on Device route: {@link APIRoutes#DEVICE_ROUTE}
+ */
 @RestController
 public class DeviceController {
     private final House house;
@@ -25,10 +26,15 @@ public class DeviceController {
         this.house = house;
     }
 
+    /**
+     * Returns the list of all devices
+     * @param apiVersion api version specified in the route
+     * @return list of all devices in the house
+     */
     @GetMapping(APIRoutes.DEVICE_ROUTE)
     public ArrayList<DeviceDTO> getDevices(@PathVariable String apiVersion) {
         if(apiVersion.equals(APIVersions.V0_1)) {
-            return new ArrayList<>((house.getDevicesOfType(Device.class).values()));
+            return new ArrayList<>((house.getDevicesOfType(DeviceDTO.class).values()));
         }
 
         throw new ResponseStatusException(
@@ -36,6 +42,12 @@ public class DeviceController {
         );
     }
 
+    /**
+     * Returns the device specified by it`s label
+     * @param label label of the requested device specified in route
+     * @param apiVersion api version specified in route
+     * @return device of any type with given label from the house,
+     */
     @GetMapping(DEVICE_ID_ROUTE)
     public DeviceDTO getDevice(@PathVariable String label, @PathVariable String apiVersion) {
         if(apiVersion.equals(APIVersions.V0_1)) {
