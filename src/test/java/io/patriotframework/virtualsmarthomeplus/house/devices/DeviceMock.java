@@ -1,4 +1,4 @@
-package io.patriotframework.virtualsmarthomeplus.devices;
+package io.patriotframework.virtualsmarthomeplus.house.devices;
 
 
 import io.patriotframework.virtualsmarthomeplus.house.devices.Device;

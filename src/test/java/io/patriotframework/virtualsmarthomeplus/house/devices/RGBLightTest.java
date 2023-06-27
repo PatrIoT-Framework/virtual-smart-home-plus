@@ -1,6 +1,5 @@
-package io.patriotframework.virtualsmarthomeplus.devices;
+package io.patriotframework.virtualsmarthomeplus.house.devices;
 
-import io.patriotframework.virtualsmarthomeplus.house.devices.Device;
 import io.patriotframework.virtualsmarthomeplus.house.devices.finalDevices.RGBLight;
 import org.junit.jupiter.api.Test;
 
