@@ -16,8 +16,8 @@ import javax.validation.Valid;
 public class DoorController extends FinalDeviceHandling {
     private static final String DOOR_ID_ROUTE = APIRoutes.DOOR_ROUTE + "{label}";
 
-    DoorController(House house, DTOMapper dtoMapper) {
-        super(house, dtoMapper);
+    DoorController(House house) {
+        super(house);
     }
 
     /**
@@ -48,9 +48,9 @@ public class DoorController extends FinalDeviceHandling {
      * @param apiVersion api version specified in route
      * @return door updated or added to the house
      */
-    @PutMapping(APIRoutes.DOOR_ROUTE)
-    public DeviceDTO putDoor(@Valid @RequestBody DoorDTO device, @PathVariable String apiVersion) {
-        return handlePut(device, apiVersion);
+    @PutMapping(DOOR_ID_ROUTE)
+    public DeviceDTO putDoor(@Valid @RequestBody DoorDTO device,@PathVariable String label, @PathVariable String apiVersion) {
+        return handlePut(label,device, apiVersion);
     }
 
     /**

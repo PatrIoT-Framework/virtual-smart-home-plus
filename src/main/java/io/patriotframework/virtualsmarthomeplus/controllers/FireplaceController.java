@@ -16,8 +16,8 @@ public class FireplaceController extends FinalDeviceHandling {
     private static final String FIREPLACE_ID_ROUTE = APIRoutes.FIREPLACE_ROUTE + "{label}";
 
 
-    FireplaceController(House house, DTOMapper AbstractDeviceDTO) {
-        super(house, AbstractDeviceDTO);
+    FireplaceController(House house) {
+        super(house);
     }
 
     /**
@@ -48,9 +48,9 @@ public class FireplaceController extends FinalDeviceHandling {
      * @param apiVersion api version specified in route
      * @return fireplace updated or added to the house
      */
-    @PutMapping(APIRoutes.FIREPLACE_ROUTE)
-    public DeviceDTO putFireplace(@Valid @RequestBody FireplaceDTO device, @PathVariable String apiVersion) {
-        return handlePut(device, apiVersion);
+    @PutMapping(FIREPLACE_ID_ROUTE)
+    public DeviceDTO putFireplace(@Valid @RequestBody FireplaceDTO device,@PathVariable String label, @PathVariable String apiVersion) {
+        return handlePut(label,device, apiVersion);
     }
 
     /**
