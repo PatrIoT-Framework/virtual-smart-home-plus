@@ -32,5 +32,15 @@ public class APIRoutes {
     /**
      * Route of the final device door.
      */
-    public static final String DOOR_ROUTE = DEVICE_ROUTE + "door/";;
+    public static final String DOOR_ROUTE = DEVICE_ROUTE + "door/";
+    /**
+     * Route of the final device thermometer.
+     */
+    public static final String THERMOMETER_ROUTE = DEVICE_ROUTE + "thermometer/";
+    /**
+     * Route of the final device RGBLight.
+     */
+    public static final String RGB_LIGHT_ROUTE = DEVICE_ROUTE + "RGBLight/";
+
+
 }

@@ -3,13 +3,16 @@ package io.patriotframework.virtualsmarthomeplus.DTOs;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 /**
  * Base class for all devices
  */
-@Getter @Setter @NoArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
 public class DeviceDTO {
     /**
      * Each device has unique label. Label represents id of the device.
@@ -17,9 +20,18 @@ public class DeviceDTO {
     @NotEmpty
     public String label;
 
+    public String deviceType;
     /**
      * True if device is enabled
      */
-    @NotNull
     public Boolean enabled;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!this.getDeviceType().equals(((DeviceDTO) o).getDeviceType())) return false;
+        DeviceDTO deviceDTO = (DeviceDTO) o;
+        return Objects.equals(label, deviceDTO.label) && Objects.equals(enabled, deviceDTO.enabled);
+    }
 }

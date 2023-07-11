@@ -6,6 +6,7 @@ import io.patriotframework.virtualsmarthomeplus.house.devices.Device;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
 import javax.management.openmbean.KeyAlreadyExistsException;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -18,9 +19,9 @@ import java.util.stream.Collectors;
 @Service
 public class House {
 
-    DTOMapper dtoMapper;
     private static final Logger LOGGER = LoggerFactory.getLogger(House.class);
     private final Map<String, Device> devices = new ConcurrentHashMap<>();
+    DTOMapper dtoMapper;
 
     public House(DTOMapper dtoMapper) {
         this.dtoMapper = dtoMapper;
@@ -29,15 +30,14 @@ public class House {
     /**
      * Puts new device to the house object.
      *
-     * @param deviceDto actual instance of device
-     * @throws IllegalArgumentException if device is null
+     * @param device actual instance of device
+     * @throws IllegalArgumentException  if device is null
      * @throws KeyAlreadyExistsException if device with given label is already present in the house
      */
-    public void addDevice(DeviceDTO deviceDto) throws IllegalArgumentException, KeyAlreadyExistsException {
-        if(deviceDto == null) {
+    public void addDevice(Device device) throws IllegalArgumentException, KeyAlreadyExistsException {
+        if (device == null) {
             throw new IllegalArgumentException("Device cannot be null");
         }
-        Device device = dtoMapper.map(deviceDto);
         final Device origDevice = devices.putIfAbsent(device.getLabel(), device);
         if (origDevice != null) {
             throw new KeyAlreadyExistsException(
@@ -54,7 +54,7 @@ public class House {
      * @throws IllegalArgumentException if label is null
      */
     public DeviceDTO getDevice(String label) throws IllegalArgumentException {
-        if(label == null) {
+        if (label == null) {
             throw new IllegalArgumentException("Label can't be null.");
         }
         //return deviceMapper.deviceToDto(devices.get(label));
@@ -65,24 +65,31 @@ public class House {
      * Updates device from the house.
      *
      * @param deviceDto device with updated values (device is specified by its label)
+     * @param  label label of device to be updated
      * @throws IllegalArgumentException if device is null
-     * @throws NoSuchElementException if no device with given label is not present in the house
+     * @throws NoSuchElementException   if no device with given label is not present in the house
      */
-    public void updateDevice(DeviceDTO deviceDto) throws IllegalArgumentException, NoSuchElementException {
-        if(deviceDto == null)  {
+    public void updateDevice(String label, DeviceDTO deviceDto) throws IllegalArgumentException, NoSuchElementException {
+        if (deviceDto == null) {
             throw new IllegalArgumentException("Device can't be null");
         }
-        Device device = dtoMapper.map(deviceDto);
-        final Device origDevice = devices.get(device.getLabel());
-        if(origDevice== null) {
+        if (label == null) {
+            throw new IllegalArgumentException("Label can't be null");
+        }
+        final Device origDevice = devices.get(label);
+        if (origDevice == null) {
             throw new NoSuchElementException(
-                    String.format("Device with label: %s is not present in the house", device.getLabel()));
+                    String.format("Device with label: %s is not present in the house", deviceDto.getLabel()));
         }
-        devices.put(device.getLabel(), device);
-        if(!LOGGER.isDebugEnabled()) {
-            LOGGER.info(String.format("Device with label:%s updated.", device.getLabel()));
+        if (!origDevice.getLabel().equals(deviceDto.getLabel())) {
+            devices.put(deviceDto.getLabel(), origDevice);
+            devices.remove(label);
         }
-        LOGGER.debug(String.format("Device:%s updated to: %s", origDevice, device));
+        origDevice.update(deviceDto);
+        if (!LOGGER.isDebugEnabled()) {
+            LOGGER.info(String.format("Device with label:%s updated.", deviceDto.getLabel()));
+        }
+        LOGGER.debug(String.format("Device:%s updated", origDevice));
     }
 
     /**
@@ -90,14 +97,14 @@ public class House {
      *
      * @param label label of the device to be removed
      * @throws IllegalArgumentException if label is null
-     * @throws NoSuchElementException if house doesn't contain device with given label
+     * @throws NoSuchElementException   if house doesn't contain device with given label
      */
-    public void removeDevice(String label) throws IllegalArgumentException, NoSuchElementException{
-        if(label == null) {
+    public void removeDevice(String label) throws IllegalArgumentException, NoSuchElementException {
+        if (label == null) {
             throw new IllegalArgumentException("label can't be null");
         }
         final Device origDevice = devices.remove(label);
-        if(origDevice == null) {
+        if (origDevice == null) {
             throw new NoSuchElementException(
                     String.format("Device with label: %s can't be removed from the house because it does not contain" +
                             " such device", label));
@@ -113,7 +120,7 @@ public class House {
      * @return map of labels and devices of requested type, Empty set if such device does not exist
      */
     public Map<String, DeviceDTO> getDevicesOfType(Class<? extends DeviceDTO> deviceDtoType) {
-        Class<?extends Device> deviceType = dtoMapper.mapDtoClassType(deviceDtoType);
+        Class<? extends Device> deviceType = dtoMapper.mapDtoClassType(deviceDtoType);
 
         Map<String, DeviceDTO> res = devices.entrySet().stream()
                 .filter(x -> deviceType.isAssignableFrom(x.getValue().getClass()))

@@ -1,6 +1,9 @@
 package io.patriotframework.virtualsmarthomeplus.house.devices.finalDevices;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import io.patriotframework.virtualsmarthomeplus.DTOs.DeviceDTO;
+import io.patriotframework.virtualsmarthomeplus.DTOs.RGBLightDTO;
 import io.patriotframework.virtualsmarthomeplus.house.House;
 import io.patriotframework.virtualsmarthomeplus.house.devices.Actuator;
 import io.patriotframework.virtualsmarthomeplus.house.devices.Device;
@@ -9,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class RGBLight extends Actuator {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(House.class);
@@ -32,6 +36,7 @@ public class RGBLight extends Actuator {
      * Creates new RGBLight with given label.
      * Color of the new RGBLight is given by parameters.
      *
+     * @param label label of the new RGBLight
      * @param red   intensity of red in new RGB light
      * @param green intensity of green in new RGB light
      * @param blue  intensity of blue in new RGB light
@@ -52,6 +57,7 @@ public class RGBLight extends Actuator {
      */
     public RGBLight(RGBLight origRGBLight, String newLabel) {
         super(origRGBLight, newLabel);
+        setRGB(0, 0, 0);
     }
 
     /**
@@ -93,6 +99,15 @@ public class RGBLight extends Actuator {
     }
 
     /**
+     * Gets intensity of red color
+     *
+     * @return intensity of red color as int
+     */
+    public int getRed() {
+        return this.red;
+    }
+
+    /**
      * Sets intensity of red color
      *
      * @param red new value of red
@@ -115,12 +130,12 @@ public class RGBLight extends Actuator {
     }
 
     /**
-     * Gets intensity of red color
+     * Gets intensity of green color
      *
-     * @return intensity of red color as int
+     * @return intensity of green color as int
      */
-    public int getRed() {
-        return this.red;
+    public int getGreen() {
+        return this.green;
     }
 
     /**
@@ -146,12 +161,12 @@ public class RGBLight extends Actuator {
     }
 
     /**
-     * Gets intensity of green color
+     * Gets intensity of blue color
      *
-     * @return intensity of green color as int
+     * @return intensity of blue color as int
      */
-    public int getGreen() {
-        return this.green;
+    public int getBlue() {
+        return this.blue;
     }
 
     /**
@@ -177,20 +192,11 @@ public class RGBLight extends Actuator {
     }
 
     /**
-     * Gets intensity of blue color
-     *
-     * @return intensity of blue color as int
-     */
-    public int getBlue() {
-        return this.blue;
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
     public RGBLight createWithSameAttributes(String newLabel) {
-        return new RGBLight(this,newLabel);
+        return new RGBLight(this, newLabel);
     }
 
     /**
@@ -198,19 +204,39 @@ public class RGBLight extends Actuator {
      */
     @Override
     public boolean hasSameAttributes(Device rgbLight) throws IllegalArgumentException {
-        if(rgbLight == null) {
+        if (rgbLight == null) {
             throw new IllegalArgumentException("Fireplace cannot be null");
         }
-        if(this.getClass() != rgbLight.getClass()) {
+        if (this.getClass() != rgbLight.getClass()) {
             throw new IllegalArgumentException("device must be of class Fireplace");
         }
 
         RGBLight typedRGB = (RGBLight) rgbLight;
 
-        if(this.isEnabled() != typedRGB.isEnabled()) {
+        if (this.isEnabled() != typedRGB.isEnabled()) {
             return false;
         }
 
         return typedRGB.getRGB().equals(this.getRGB());
+    }
+
+    /**
+     * Updates the rgbLight object with the values from provided DTO.
+     *
+     * @param deviceDTO rgbLight DTO containing the updated values or null if value was not updated
+     */
+    @Override
+    public void update(DeviceDTO deviceDTO) {
+        RGBLightDTO rgbLightDTO = (RGBLightDTO) deviceDTO;
+        if (rgbLightDTO.getRed() != null) {
+            setRed(rgbLightDTO.getRed());
+        }
+        if (rgbLightDTO.getGreen() != null) {
+            setGreen(rgbLightDTO.getGreen());
+        }
+        if (rgbLightDTO.getBlue() != null) {
+            setBlue(rgbLightDTO.getBlue());
+        }
+        super.update(rgbLightDTO);
     }
 }
