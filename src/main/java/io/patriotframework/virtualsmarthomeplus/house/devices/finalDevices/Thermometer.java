@@ -13,12 +13,10 @@ public class Thermometer extends Sensor {
 
     public static final String CELSIUS = "°C";
     public static final String FAHRENHEIT = "°F";
-    //public static final String KELVIN = "K";
+    //public static final String KELVIN = "K";     private  Float temperature;
     public static final String DEFAULT_UNIT = CELSIUS;
     private static final Logger LOGGER = LoggerFactory.getLogger(House.class);
-    private final DataFeed dataFeedC = new NormalDistVariateDataFeed(25, 1);
-
-    private final io.patriot_framework.generator.device.Device device = new io.patriot_framework.generator.device.impl.basicSensors.Thermometer(getLabel(), dataFeedC);
+    private final io.patriot_framework.generator.device.Device device;
     private String unit;
 
     /**
@@ -40,6 +38,8 @@ public class Thermometer extends Sensor {
     @JsonCreator
     public Thermometer(String label, String unit) {
         super(label);
+        DataFeed dataFeedC = new NormalDistVariateDataFeed(25, 1);
+        device  = new io.patriot_framework.generator.device.impl.basicSensors.Thermometer(getLabel(), dataFeedC);
         this.unit = unit;
     }
 
