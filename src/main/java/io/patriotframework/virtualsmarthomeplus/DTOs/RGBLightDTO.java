@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.Objects;
 
 /**
@@ -15,14 +17,20 @@ public class RGBLightDTO extends ActuatorDTO {
     /**
      * this attribute contains intensity of red color in RGB
      */
+    @Min(0)
+    @Max(255)
     public Integer red;
     /**
      * this attribute contains intensity of green color in RGB
      */
+    @Min(0)
+    @Max(255)
     public Integer green;
     /**
      * this attribute contains intensity of blue color in RGB
      */
+    @Min(0)
+    @Max(255)
     public Integer blue;
 
     /**
