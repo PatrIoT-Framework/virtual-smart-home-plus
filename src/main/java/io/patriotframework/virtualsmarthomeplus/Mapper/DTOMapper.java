@@ -12,6 +12,7 @@ import org.modelmapper.TypeMap;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
+import java.util.stream.Collectors;
 
 /**
  * Class responsible for mapping model objects to DTOs
@@ -84,7 +85,10 @@ public class DTOMapper {
      */
     public HouseDTO map(House house) {
         HouseDTO dto = modelMapper.map(house, HouseDTO.class);
-        dto.setDevices(house.getDevicesOfType(DeviceDTO.class).values().stream().toList());
+        dto.setDevices(house.getDevicesOfType(Device.class)
+                .stream()
+                .map(this::map)
+                .collect(Collectors.toList()));
         return dto;
     }
 

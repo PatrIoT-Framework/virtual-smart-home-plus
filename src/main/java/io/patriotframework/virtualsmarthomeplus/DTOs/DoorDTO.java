@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter @Setter @NoArgsConstructor
 public class DoorDTO extends DeviceDTO {
     /**
-     * specifies device ty by string value "Door"
+     * specifies device type by string value "Door"
      */
     public final String deviceType = "Door";
     /**

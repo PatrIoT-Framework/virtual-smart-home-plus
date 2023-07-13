@@ -1,12 +1,18 @@
 package io.patriotframework.virtualsmarthomeplus.controllers;
 
 import io.patriotframework.virtualsmarthomeplus.APIRoutes;
+import io.patriotframework.virtualsmarthomeplus.APIVersions;
 import io.patriotframework.virtualsmarthomeplus.DTOs.DeviceDTO;
 import io.patriotframework.virtualsmarthomeplus.DTOs.DoorDTO;
-import io.patriotframework.virtualsmarthomeplus.Mapper.DTOMapper;
 import io.patriotframework.virtualsmarthomeplus.house.House;
+import io.patriotframework.virtualsmarthomeplus.house.devices.finalDevices.Door;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 
 /**
@@ -22,45 +28,75 @@ public class DoorController extends FinalDeviceHandling {
 
     /**
      * Returns the door
-     * @param label label specified in route
+     *
+     * @param label      label specified in route
      * @param apiVersion api version specified in route
      * @return door if present in the house
      */
     @GetMapping(DOOR_ID_ROUTE)
-    public DeviceDTO getDoor(@PathVariable String label, @PathVariable String apiVersion) {
-        return handleGet(label, DoorDTO.class, apiVersion);
+    public ResponseEntity<DeviceDTO> getDoor(@NotNull @PathVariable String label, @PathVariable String apiVersion) {
+        if (apiVersion.equals(APIVersions.V0_1)) {
+            return new ResponseEntity<>(handleGet(label, Door.class),HttpStatus.OK);
+        }
+
+        throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND, String.format("Unknown api version: %s", apiVersion) // 404
+        );
     }
 
     /**
      * Creates the door
-     * @param device new door
+     *
+     * @param device     new door
      * @param apiVersion api version specified in route
      * @return door added to the house
      */
     @PostMapping(APIRoutes.DOOR_ROUTE)
-    public DeviceDTO postDoor(@Valid @RequestBody DoorDTO device, @PathVariable String apiVersion) {
-        return handlePost(device, apiVersion);
+    public ResponseEntity<DeviceDTO> postDoor(@Valid @RequestBody DoorDTO device, @NotNull @PathVariable String apiVersion) {
+        if (apiVersion.equals(APIVersions.V0_1)) {
+            return new ResponseEntity<>(handlePost(device), HttpStatus.OK);
+        }
+
+        throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND, String.format("Unknown api version: %s", apiVersion) // 404
+        );
     }
 
     /**
      * Updates or creates the door
-     * @param device updated door
+     *
+     * @param device     updated door
      * @param apiVersion api version specified in route
      * @return door updated or added to the house
      */
     @PutMapping(DOOR_ID_ROUTE)
-    public DeviceDTO putDoor(@Valid @RequestBody DoorDTO device,@PathVariable String label, @PathVariable String apiVersion) {
-        return handlePut(label,device, apiVersion);
+    public ResponseEntity<DeviceDTO> putDoor(@Valid @RequestBody DoorDTO device, @NotNull @PathVariable String label, @PathVariable String apiVersion) {
+        if (apiVersion.equals(APIVersions.V0_1)) {
+            return new ResponseEntity<>(handlePut(label, device), HttpStatus.OK);
+        }
+
+        throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND, String.format("Unknown api version: %s", apiVersion) // 404
+        );
     }
 
     /**
      * Deletes the door
-     * @param label label of the door to be deleted
+     *
+     * @param label      label of the door to be deleted
      * @param apiVersion api version specified in route
      * @return "OK" if door exists in the house and was deleted
      */
     @DeleteMapping(DOOR_ID_ROUTE)
-    public String deleteDoor(@PathVariable String label, @PathVariable String apiVersion) {
-        return handleDelete(label, DoorDTO.class, apiVersion);
+    public ResponseEntity<HttpStatus> deleteDoor(@NotNull @PathVariable String label, @PathVariable String apiVersion) {
+        if (apiVersion.equals(APIVersions.V0_1)) {
+            handleDelete(label, Door.class);
+
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND, String.format("Unknown api version: %s", apiVersion) // 404
+        );
     }
 }

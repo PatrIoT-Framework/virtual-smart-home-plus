@@ -1,11 +1,18 @@
 package io.patriotframework.virtualsmarthomeplus.controllers;
 
 import io.patriotframework.virtualsmarthomeplus.APIRoutes;
+import io.patriotframework.virtualsmarthomeplus.APIVersions;
 import io.patriotframework.virtualsmarthomeplus.DTOs.DeviceDTO;
 import io.patriotframework.virtualsmarthomeplus.DTOs.RGBLightDTO;
-import io.patriotframework.virtualsmarthomeplus.Mapper.DTOMapper;
 import io.patriotframework.virtualsmarthomeplus.house.House;
+import io.patriotframework.virtualsmarthomeplus.house.devices.finalDevices.RGBLight;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 
 @RestController
@@ -24,8 +31,13 @@ public class RGBLightController extends FinalDeviceHandling {
      * @return RGBLight added to the house
      */
     @PostMapping(APIRoutes.RGB_LIGHT_ROUTE)
-    public DeviceDTO postLed(@RequestBody RGBLightDTO device, @PathVariable String apiVersion) {
-        return handlePost(device, apiVersion);
+    public ResponseEntity<DeviceDTO> postLed(@Valid @RequestBody RGBLightDTO device, @PathVariable String apiVersion) {
+        if (apiVersion.equals(APIVersions.V0_1)) {
+            return new ResponseEntity<>(handlePost(device), HttpStatus.OK);
+        }
+        throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND, String.format("Unknown api version: %s", apiVersion) // 404
+        );
     }
 
     /**
@@ -36,8 +48,13 @@ public class RGBLightController extends FinalDeviceHandling {
      * @return RGBlight if present in the house
      */
     @GetMapping(RGB_LIGHT_ID_ROUTE)
-    public DeviceDTO getLed(@PathVariable String label, @PathVariable String apiVersion) {
-        return handleGet(label, RGBLightDTO.class, apiVersion);
+    public ResponseEntity<DeviceDTO> getLed(@PathVariable @NotNull String label, @PathVariable String apiVersion) {
+        if (apiVersion.equals(APIVersions.V0_1)) {
+            return new ResponseEntity<>(handleGet(label, RGBLight.class), HttpStatus.OK);
+        }
+        throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND, String.format("Unknown api version: %s", apiVersion) // 404
+        );
     }
 
     /**
@@ -48,8 +65,13 @@ public class RGBLightController extends FinalDeviceHandling {
      * @return RGBLight updated or added to the house
      */
     @PutMapping(RGB_LIGHT_ID_ROUTE)
-    public DeviceDTO putLed(@RequestBody RGBLightDTO device, @PathVariable String label, @PathVariable String apiVersion) {
-        return handlePut(label, device, apiVersion);
+    public ResponseEntity<DeviceDTO> putLed(@Valid @RequestBody RGBLightDTO device, @PathVariable @NotNull String label, @PathVariable String apiVersion) {
+        if (apiVersion.equals(APIVersions.V0_1)) {
+            return new ResponseEntity<>(handlePut(label, device), HttpStatus.OK);
+        }
+        throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND, String.format("Unknown api version: %s", apiVersion) // 404
+        );
     }
 
 
@@ -61,7 +83,14 @@ public class RGBLightController extends FinalDeviceHandling {
      * @return "OK" if RGBLight exists in the house and was deleted
      */
     @DeleteMapping(RGB_LIGHT_ID_ROUTE)
-    public String deleteRGBLight(@PathVariable String label, @PathVariable String apiVersion) {
-        return handleDelete(label, RGBLightDTO.class, apiVersion);
+    public ResponseEntity<HttpStatus> deleteRGBLight(@PathVariable @NotNull String label, @PathVariable String apiVersion) {
+        if (apiVersion.equals(APIVersions.V0_1)) {
+            handleDelete(label, RGBLight.class);
+
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND, String.format("Unknown api version: %s", apiVersion) // 404
+        );
     }
 }

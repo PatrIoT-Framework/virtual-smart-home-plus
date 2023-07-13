@@ -1,5 +1,6 @@
 package io.patriotframework.virtualsmarthomeplus.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.patriotframework.virtualsmarthomeplus.DTOs.DeviceDTO;
 import io.patriotframework.virtualsmarthomeplus.DTOs.RGBLightDTO;
@@ -39,7 +40,7 @@ public class RGBLightApiTest {
 
     private final DTOMapper dtoMaper = new DTOMapper(new ModelMapper());
     @Autowired
-    public House house = new House(dtoMaper);
+    public House house = new House();
     private MockMvc mockMvc;
     @Autowired
     private WebApplicationContext wac;
@@ -55,7 +56,7 @@ public class RGBLightApiTest {
     @Test
     public void shouldFetchDevice() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
-        RGBLightDTO rgbLightDTO = (RGBLightDTO) house.getDevice("rgb1");
+        RGBLightDTO rgbLightDTO = (RGBLightDTO) dtoMaper.map(house.getDevice("rgb1"));
         MvcResult result = this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v0.1/house/device/RGBLight/rgb1")
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -88,7 +89,7 @@ public class RGBLightApiTest {
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(rgb)))
                 .andExpect(status().isOk());
-        DeviceDTO deviceDTO = house.getDevice("rgb2");
+        DeviceDTO deviceDTO = dtoMaper.map(house.getDevice("rgb2"));
         assertEquals(rgb, deviceDTO);
 
         RGBLightDTO rgb1 = new RGBLightDTO();
@@ -98,7 +99,7 @@ public class RGBLightApiTest {
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(rgb1)))
                 .andExpect(status().isOk());
-        deviceDTO = house.getDevice("rgb3");
+        deviceDTO = dtoMaper.map(house.getDevice("rgb3"));
         assertNotEquals(rgb, deviceDTO);
     }
 
@@ -113,7 +114,7 @@ public class RGBLightApiTest {
                         .content(objectMapper.writeValueAsString(rgb))
                 )
                 .andExpect(status().isOk());
-        RGBLightDTO rgbLightDTO2 = (RGBLightDTO) house.getDevice("rgb1");
+        RGBLightDTO rgbLightDTO2 =  (RGBLightDTO) dtoMaper.map(house.getDevice("rgb1"));
         assertEquals(rgbLightDTO2.getRed(), 25);
         assertEquals(rgbLightDTO2.getBlue(), 0);
 
@@ -129,7 +130,7 @@ public class RGBLightApiTest {
                         .content(objectMapper.writeValueAsString(rgb))
                 )
                 .andExpect(status().isOk());
-        rgbLightDTO2 = (RGBLightDTO) house.getDevice("rgb1");
+        rgbLightDTO2 = (RGBLightDTO) dtoMaper.map(house.getDevice("rgb1"));
         assertEquals(rgbLightDTO2.getRed(), 25);
         assertEquals(rgbLightDTO2.getBlue(), 40);
         assertEquals(rgbLightDTO2.getGreen(), 40);
@@ -144,7 +145,7 @@ public class RGBLightApiTest {
                         .content(objectMapper.writeValueAsString(rgb))
                 )
                 .andExpect(status().isOk());
-        rgbLightDTO2 = (RGBLightDTO) house.getDevice("2");
+        rgbLightDTO2 = (RGBLightDTO) dtoMaper.map(house.getDevice("2"));
         assertEquals(rgbLightDTO2.getRed(), 25);
         assertEquals(rgbLightDTO2.getBlue(), 40);
         assertEquals(rgbLightDTO2.getGreen(), 40);
@@ -160,7 +161,7 @@ public class RGBLightApiTest {
                         .content(objectMapper.writeValueAsString(rgb))
                 )
                 .andExpect(status().isOk());
-        rgbLightDTO2 = (RGBLightDTO) house.getDevice("2");
+        rgbLightDTO2 =  (RGBLightDTO) dtoMaper.map(house.getDevice("2"));
         assertEquals(rgbLightDTO2.getRed(), 4);
         assertEquals(rgbLightDTO2.getBlue(), 40);
         assertEquals(rgbLightDTO2.getGreen(), 40);
@@ -175,7 +176,24 @@ public class RGBLightApiTest {
         this.mockMvc.perform(MockMvcRequestBuilders.delete("/api/v0.1/house/device/RGBLight/1")
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().is2xxSuccessful())
                 .andReturn();
     }
+    @Test
+    public void errorShouldOccur() throws Exception {
+        RGBLightDTO rgb = new RGBLightDTO();
+        rgb.setLabel("rgb1");
+        rgb.setSwitchedOn(true);
+        rgb.setBlue(0);
+        rgb.setGreen(0);
+        rgb.setRed(0);
+        rgb.setEnabled(false);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        this.mockMvc.perform(post("/api/v0.1/house/device/RGBLight/")
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(rgb)))
+                .andExpect(status().is4xxClientError());
+    }
 }
+
