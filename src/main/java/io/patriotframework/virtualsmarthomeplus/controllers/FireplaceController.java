@@ -46,7 +46,7 @@ public class FireplaceController extends FinalDeviceHandling {
     /**
      * Creates the fireplace
      *
-     * @param device     new fireplace
+     * @param device     new fireplace DTO
      * @param apiVersion api version specified in route
      * @return fireplace added to the house
      */
@@ -64,7 +64,7 @@ public class FireplaceController extends FinalDeviceHandling {
     /**
      * Updates or creates the fireplace
      *
-     * @param device     updated fireplace
+     * @param device     updated fireplace DTO
      * @param apiVersion api version specified in route
      * @return fireplace updated or added to the house
      */

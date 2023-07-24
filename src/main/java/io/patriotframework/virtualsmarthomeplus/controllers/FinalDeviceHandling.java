@@ -33,7 +33,7 @@ public class FinalDeviceHandling {
      *
      * @param label       label of the requested device
      * @param deviceClass class of the requested device
-     * @return device of specified class with given label if present in the house
+     * @return device DTO of specified class with given label if present in the house
      * @throws ResponseStatusException 404 if device is not present in the house or invalid API version is demanded
      */
     public DeviceDTO handleGet(String label, Class<? extends Device> deviceClass)
@@ -71,7 +71,8 @@ public class FinalDeviceHandling {
      * Serving method for put requests on the final device.
      *
      * @param device device to update or add to the house
-     * @return updated device of specified class with given label if present in the house
+     * @param label label of the device to be updated
+     * @return updated device DTO of specified class with given label if present in the house
      * @throws IllegalArgumentException if label is null
      * @throws NoSuchElementException if device we want to update is not in the house
      */

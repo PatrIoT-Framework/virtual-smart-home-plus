@@ -26,7 +26,7 @@ public class RGBLightController extends FinalDeviceHandling {
     /**
      * Creates the RGBLight
      *
-     * @param device     new RGBLight
+     * @param device     new RGBLight DTO
      * @param apiVersion api version specified in route
      * @return RGBLight added to the house
      */
@@ -60,7 +60,7 @@ public class RGBLightController extends FinalDeviceHandling {
     /**
      * Updates or creates the RGBLight
      *
-     * @param device     updated RGBLight
+     * @param device     updated RGBLight DTO
      * @param apiVersion api version specified in route
      * @return RGBLight updated or added to the house
      */

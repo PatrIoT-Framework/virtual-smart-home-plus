@@ -19,7 +19,9 @@ public class DeviceDTO {
      */
     @NotEmpty
     public String label;
-
+    /**
+     * Type of the device
+     */
     public String deviceType;
     /**
      * True if device is enabled

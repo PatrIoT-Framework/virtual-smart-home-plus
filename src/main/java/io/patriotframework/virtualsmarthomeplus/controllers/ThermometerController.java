@@ -42,7 +42,7 @@ public class ThermometerController extends FinalDeviceHandling{
 
     /**
      * Creates the thermometer
-     * @param device new thermometer
+     * @param device new thermometer DTO
      * @param apiVersion api version specified in route
      * @return thermometer added to the house
      */
@@ -53,7 +53,7 @@ public class ThermometerController extends FinalDeviceHandling{
 
     /**
      * Updates or creates the thermometer
-     * @param thermometer updated thermometer
+     * @param thermometer updated thermometer DTO
      * @param apiVersion api version specified in route
      * @return thermometer updated or added to the house
      */

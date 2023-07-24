@@ -34,7 +34,7 @@ public class RGBLightDTO extends ActuatorDTO {
     public Integer blue;
 
     /**
-     * construtor sets deviceType of device
+     * constructor sets deviceType of device
      */
     public RGBLightDTO() {
         this.deviceType="RGBLight";
