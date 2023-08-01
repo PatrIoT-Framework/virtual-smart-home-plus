@@ -1,6 +1,7 @@
 package io.patriotframework.virtualsmarthomeplus.controllers;
 
 import io.patriotframework.virtualsmarthomeplus.APIRoutes;
+import io.patriotframework.virtualsmarthomeplus.APIVersions;
 import io.patriotframework.virtualsmarthomeplus.DTOs.DeviceDTO;
 import io.patriotframework.virtualsmarthomeplus.DTOs.ThermometerDTO;
 import io.patriotframework.virtualsmarthomeplus.house.House;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
+
 import javax.validation.constraints.NotNull;
 
 @RestController
@@ -41,7 +44,12 @@ public class ThermometerController extends FinalDeviceHandling {
      */
     @GetMapping(THERMOMETER_ID_ROUTE)
     public DeviceDTO getThermometer(@PathVariable String label, @PathVariable String apiVersion) {
-        return handleGet(label, Thermometer.class);
+        if (apiVersion.equals(APIVersions.V0_1)) {
+            return handleGet(label, Thermometer.class);
+        }
+        throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND, String.format("Unknown api version: %s", apiVersion) // 404
+        );
     }
 
     /**
@@ -57,7 +65,12 @@ public class ThermometerController extends FinalDeviceHandling {
             @RequestBody ThermometerDTO device,
             @PathVariable String label,
             @PathVariable String apiVersion) {
-        return handlePost(device);
+        if (apiVersion.equals(APIVersions.V0_1)) {
+            return handlePost(device);
+        }
+        throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND, String.format("Unknown api version: %s", apiVersion) // 404
+        );
     }
 
     /**
@@ -74,7 +87,12 @@ public class ThermometerController extends FinalDeviceHandling {
             @NotNull @PathVariable String label,
             @PathVariable String apiVersion
     ) {
-        return handlePut(label, thermometer);
+        if (apiVersion.equals(APIVersions.V0_1)) {
+            return handlePut(label, thermometer);
+        }
+        throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND, String.format("Unknown api version: %s", apiVersion) // 404
+        );
     }
 
     /**
@@ -89,8 +107,14 @@ public class ThermometerController extends FinalDeviceHandling {
             @NotNull @PathVariable String label,
             @PathVariable String apiVersion
     ) {
-        handleDelete(label, Thermometer.class);
+        if (apiVersion.equals(APIVersions.V0_1)) {
+            handleDelete(label, Thermometer.class);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND, String.format("Unknown api version: %s", apiVersion) // 404
+        );
     }
 }
