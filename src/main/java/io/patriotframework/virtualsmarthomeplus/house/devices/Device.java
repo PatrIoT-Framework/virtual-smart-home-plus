@@ -95,6 +95,7 @@ public abstract class Device implements Comparable<Device> {
      * Method responsible for creation new devices with the same values of attributes except the label
      *
      * @param newLabel label of the new device
+     * @return returns created device
      */
     public abstract Device createWithSameAttributes(String newLabel);
 
@@ -103,6 +104,7 @@ public abstract class Device implements Comparable<Device> {
      *
      * @param device device to which this object will be compared
      * @throws IllegalArgumentException if parameter device is null
+     * @return return true if objects have same attributes and false otherwise
      */
     public abstract boolean hasSameAttributes(Device device) throws IllegalArgumentException;
 
@@ -127,7 +129,7 @@ public abstract class Device implements Comparable<Device> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Device device = (Device) o;
+        final Device device = (Device) o;
         return getLabel().equals(device.getLabel());
     }
 
@@ -143,7 +145,7 @@ public abstract class Device implements Comparable<Device> {
      */
     public void update(DeviceDTO deviceDTO) {
         if (deviceDTO.getEnabled() != null) {
-            this.setEnabled(deviceDTO.enabled);
+            this.setEnabled(deviceDTO.getEnabled());
         }
         if (deviceDTO.getLabel() != null) {
             this.label = deviceDTO.getLabel();

@@ -29,6 +29,7 @@ public abstract class Actuator extends Device {
      * Label of the new Actuator is given by parameter.
      *
      * @param newLabel label creates identity of the thermometer and is compared in the equals method
+     * @param origDevice template for the new Actuator
      * @throws IllegalArgumentException if given label is null or blank
      */
     public Actuator(Device origDevice, String newLabel) {
@@ -71,7 +72,7 @@ public abstract class Actuator extends Device {
      */
     @Override
     public void update(DeviceDTO deviceDTO) {
-        ActuatorDTO actuatorDTO = (ActuatorDTO) deviceDTO;
+        final ActuatorDTO actuatorDTO = (ActuatorDTO) deviceDTO;
         if (actuatorDTO.getSwitchedOn() != null) {
             if (actuatorDTO.getSwitchedOn()) {
                 this.switchOn();

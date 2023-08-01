@@ -19,23 +19,24 @@ public class APIExceptionHandler extends ResponseEntityExceptionHandler {
 
     /**
      * Returns proper response entity on MethodArgumentNotValidException.
-     * @param ex exception which caused this method call
+     *
+     * @param ex      exception which caused this method call
      * @param headers http headers
-     * @param status http status
+     * @param status  http status
      * @param request web request
      * @return {@link io.patriotframework.virtualsmarthomeplus.APIErrors.APIError APIError} instance whith list of
-     *  {@link io.patriotframework.virtualsmarthomeplus.APIErrors.NotValidSubError NotValidSubError} instances, which
-     *  informs about specific validity violations
+     * {@link io.patriotframework.virtualsmarthomeplus.APIErrors.NotValidSubError NotValidSubError} instances, which
+     * informs about specific validity violations
      */
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
 
-        String message = "Malformed JSON body";
-        APIError apiError = new APIError(status, message);
+        final String message = "Malformed JSON body";
+        final APIError apiError = new APIError(status, message);
 
         ex.getBindingResult().getAllErrors().forEach((error) ->
-                apiError.addSubError(new NotValidSubError((FieldError)error)));
+                apiError.addSubError(new NotValidSubError((FieldError) error)));
 
         return new ResponseEntity<>(apiError, status);
     }

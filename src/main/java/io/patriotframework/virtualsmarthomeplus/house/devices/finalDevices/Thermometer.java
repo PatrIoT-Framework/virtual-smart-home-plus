@@ -1,7 +1,6 @@
 package io.patriotframework.virtualsmarthomeplus.house.devices.finalDevices;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import io.patriot_framework.generator.dataFeed.DataFeed;
 import io.patriot_framework.generator.dataFeed.NormalDistVariateDataFeed;
 import io.patriotframework.virtualsmarthomeplus.house.House;
 import io.patriotframework.virtualsmarthomeplus.house.devices.Device;
@@ -33,13 +32,16 @@ public class Thermometer extends Sensor {
      * Creates new thermometer with given label and given unit.
      *
      * @param unit measuring unit
+     * @param label label of the new thermometer
      * @throws IllegalArgumentException if given label is null or blank
      */
     @JsonCreator
     public Thermometer(String label, String unit) {
         super(label);
-        DataFeed dataFeedC = new NormalDistVariateDataFeed(25, 1);
-        device  = new io.patriot_framework.generator.device.impl.basicSensors.Thermometer(getLabel(), dataFeedC);
+        device = new io.patriot_framework.generator.device.impl.basicSensors.Thermometer(
+                getLabel(),
+                new NormalDistVariateDataFeed(25, 1)
+        );
         this.unit = unit;
     }
 
@@ -85,7 +87,7 @@ public class Thermometer extends Sensor {
      *
      * @param unit change measuring unit to unit
      */
-    public void SetUnit(String unit) {
+    public void setUnit(String unit) {
         Thermometer.this.unit = unit;
         LOGGER.debug(String.format("Measuring unit changed to %s", unit));
     }
@@ -119,7 +121,7 @@ public class Thermometer extends Sensor {
             throw new IllegalArgumentException("device must be of class Fireplace");
         }
 
-        Thermometer typedThermometer = (Thermometer) thermometer;
+        final Thermometer typedThermometer = (Thermometer) thermometer;
 
         if (isEnabled() != typedThermometer.isEnabled()) {
             return false;

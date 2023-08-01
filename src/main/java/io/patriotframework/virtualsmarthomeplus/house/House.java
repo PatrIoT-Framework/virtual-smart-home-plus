@@ -1,6 +1,5 @@
 package io.patriotframework.virtualsmarthomeplus.house;
 
-import io.patriotframework.virtualsmarthomeplus.DTOs.DeviceDTO;
 import io.patriotframework.virtualsmarthomeplus.house.devices.Device;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,7 +7,6 @@ import org.springframework.beans.TypeMismatchException;
 import org.springframework.stereotype.Service;
 
 import javax.management.openmbean.KeyAlreadyExistsException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -83,19 +81,20 @@ public class House {
     }
 
     /**
-     * Provides devices of certain type which are stored in house.
+     * Provide device of certain type which is stored in house.
      *
      * @param deviceType type of requested device
+     * @param label label of requested device
      * @return device of requested type
      */
     public Device getDeviceOfType(Class<? extends Device> deviceType, String label) throws IllegalArgumentException {
 
-        Device foundDevice = getDevice(label);
-        if(foundDevice!=null) {
+        final Device foundDevice = getDevice(label);
+        if (foundDevice != null) {
             if (deviceType.isAssignableFrom(foundDevice.getClass())) {
                 return foundDevice;
             }
-            throw new TypeMismatchException(foundDevice,deviceType);
+            throw new TypeMismatchException(foundDevice, deviceType);
         }
         return null;
     }

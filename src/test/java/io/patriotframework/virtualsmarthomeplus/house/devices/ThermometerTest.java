@@ -3,14 +3,12 @@ package io.patriotframework.virtualsmarthomeplus.house.devices;
 import io.patriotframework.virtualsmarthomeplus.house.devices.finalDevices.Thermometer;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.*;
 
 
 public class ThermometerTest {
-    Thermometer thermometer1 = new Thermometer("thermometer1",Thermometer.CELSIUS);
-    Thermometer thermometer2 = new Thermometer("thermometer2",Thermometer.FAHRENHEIT);
+    Thermometer thermometer1 = new Thermometer("thermometer1", Thermometer.CELSIUS);
+    Thermometer thermometer2 = new Thermometer("thermometer2", Thermometer.FAHRENHEIT);
 
     @Test
     public void constructorTest() {
@@ -18,43 +16,41 @@ public class ThermometerTest {
             new Thermometer("thermometer3");
         });
         assertDoesNotThrow(() -> {
-            new Thermometer("thermometer4",Thermometer.FAHRENHEIT);
+            new Thermometer("thermometer4", Thermometer.FAHRENHEIT);
         });
         assertThrows(IllegalArgumentException.class, () -> new Thermometer(""));
         assertThrows(IllegalArgumentException.class, () -> new Thermometer(null));
     }
 
     @Test
-    public void  getUnit()
-    {
-        assertEquals(thermometer1.getUnit(),Thermometer.CELSIUS);
-        assertEquals(thermometer2.getUnit(),Thermometer.FAHRENHEIT);
+    public void getUnit() {
+        assertEquals(thermometer1.getUnit(), Thermometer.CELSIUS);
+        assertEquals(thermometer2.getUnit(), Thermometer.FAHRENHEIT);
     }
 
     @Test
-    public void getTemperature(){
+    public void getTemperature() {
         float temperature = thermometer1.getTemperature();
-        assertTrue(temperature<40 && temperature > 0);
+        assertTrue(temperature < 40 && temperature > 0);
     }
 
     @Test
-    public void  setUnit()
-    {
-        thermometer1.SetUnit(Thermometer.FAHRENHEIT);
-        assertEquals(thermometer1.getUnit(),Thermometer.FAHRENHEIT);
-        thermometer2.SetUnit(Thermometer.CELSIUS);
-        assertEquals(thermometer2.getUnit(),Thermometer.CELSIUS);
+    public void setUnit() {
+        thermometer1.setUnit(Thermometer.FAHRENHEIT);
+        assertEquals(thermometer1.getUnit(), Thermometer.FAHRENHEIT);
+        thermometer2.setUnit(Thermometer.CELSIUS);
+        assertEquals(thermometer2.getUnit(), Thermometer.CELSIUS);
     }
 
     @Test
     public void createWithSameAttributes() {
         Thermometer thermometer3 = (Thermometer) thermometer1.createWithSameAttributes("thermometer3");
-        assertEquals(thermometer1.getUnit(),thermometer3.getUnit());
-        assertNotEquals(thermometer3.getUnit(),thermometer2.getUnit());
+        assertEquals(thermometer1.getUnit(), thermometer3.getUnit());
+        assertNotEquals(thermometer3.getUnit(), thermometer2.getUnit());
 
         Thermometer thermometer4 = (Thermometer) thermometer2.createWithSameAttributes("thermometer4");
-        assertNotEquals(thermometer1.getUnit(),thermometer4.getUnit());
-        assertEquals(thermometer4.getUnit(),thermometer2.getUnit());
+        assertNotEquals(thermometer1.getUnit(), thermometer4.getUnit());
+        assertEquals(thermometer4.getUnit(), thermometer2.getUnit());
     }
 
     @Test
@@ -62,10 +58,10 @@ public class ThermometerTest {
         DeviceMock device1 = new DeviceMock("door1");
         assertThrows(IllegalArgumentException.class, () -> thermometer1.hasSameAttributes(device1));
 
-        assertThrows(IllegalArgumentException.class,() -> thermometer1.hasSameAttributes(null));
+        assertThrows(IllegalArgumentException.class, () -> thermometer1.hasSameAttributes(null));
 
         assertFalse(thermometer1.hasSameAttributes(thermometer2));
-        thermometer1.SetUnit(Thermometer.FAHRENHEIT);
+        thermometer1.setUnit(Thermometer.FAHRENHEIT);
         assertTrue(thermometer1.hasSameAttributes(thermometer2));
     }
 }

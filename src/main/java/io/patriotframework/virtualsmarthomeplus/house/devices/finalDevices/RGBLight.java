@@ -10,7 +10,8 @@ import io.patriotframework.virtualsmarthomeplus.house.devices.Device;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.awt.*;
+import java.awt.Color;
+
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class RGBLight extends Actuator {
@@ -211,7 +212,7 @@ public class RGBLight extends Actuator {
             throw new IllegalArgumentException("device must be of class Fireplace");
         }
 
-        RGBLight typedRGB = (RGBLight) rgbLight;
+        final RGBLight typedRGB = (RGBLight) rgbLight;
 
         if (this.isEnabled() != typedRGB.isEnabled()) {
             return false;
@@ -227,7 +228,7 @@ public class RGBLight extends Actuator {
      */
     @Override
     public void update(DeviceDTO deviceDTO) {
-        RGBLightDTO rgbLightDTO = (RGBLightDTO) deviceDTO;
+        final RGBLightDTO rgbLightDTO = (RGBLightDTO) deviceDTO;
         if (rgbLightDTO.getRed() != null) {
             setRed(rgbLightDTO.getRed());
         }

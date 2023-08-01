@@ -8,7 +8,13 @@ import io.patriotframework.virtualsmarthomeplus.house.House;
 import io.patriotframework.virtualsmarthomeplus.house.devices.finalDevices.RGBLight;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
@@ -62,10 +68,15 @@ public class RGBLightController extends FinalDeviceHandling {
      *
      * @param device     updated RGBLight DTO
      * @param apiVersion api version specified in route
+     * @param label label of the RGBLight to be created
      * @return RGBLight updated or added to the house
      */
     @PutMapping(RGB_LIGHT_ID_ROUTE)
-    public ResponseEntity<DeviceDTO> putLed(@Valid @RequestBody RGBLightDTO device, @PathVariable @NotNull String label, @PathVariable String apiVersion) {
+    public ResponseEntity<DeviceDTO> putLed(
+            @Valid @RequestBody RGBLightDTO device,
+            @PathVariable @NotNull String label,
+            @PathVariable String apiVersion
+    ) {
         if (apiVersion.equals(APIVersions.V0_1)) {
             return new ResponseEntity<>(handlePut(label, device), HttpStatus.OK);
         }
@@ -83,7 +94,10 @@ public class RGBLightController extends FinalDeviceHandling {
      * @return "OK" if RGBLight exists in the house and was deleted
      */
     @DeleteMapping(RGB_LIGHT_ID_ROUTE)
-    public ResponseEntity<HttpStatus> deleteRGBLight(@PathVariable @NotNull String label, @PathVariable String apiVersion) {
+    public ResponseEntity<HttpStatus> deleteRGBLight(
+            @PathVariable @NotNull String label,
+            @PathVariable String apiVersion
+    ) {
         if (apiVersion.equals(APIVersions.V0_1)) {
             handleDelete(label, RGBLight.class);
 

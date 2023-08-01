@@ -14,11 +14,10 @@ import org.slf4j.LoggerFactory;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class Door extends Device {
 
-    private boolean opened = false;
-    private static final Logger LOGGER = LoggerFactory.getLogger(House.class);
-
     public static final String OPENED = "opened";
     public static final String CLOSED = "closed";
+    private static final Logger LOGGER = LoggerFactory.getLogger(House.class);
+    private boolean opened = false;
 
     /**
      * Creates new door with given label.
@@ -35,7 +34,7 @@ public class Door extends Device {
      * Label of the new door is given by parameter.
      *
      * @param origDoor new door copies values of given device
-     * @param newLabel   label creates identity of the door and is compared in the equals method
+     * @param newLabel label creates identity of the door and is compared in the equals method
      * @throws IllegalArgumentException if given label is null or blank
      */
     public Door(Door origDoor, String newLabel) {
@@ -85,16 +84,16 @@ public class Door extends Device {
      */
     @Override
     public boolean hasSameAttributes(Device door) throws IllegalArgumentException {
-        if(door == null) {
+        if (door == null) {
             throw new IllegalArgumentException("Door cannot be null");
         }
-        if(getClass() != door.getClass()) {
+        if (getClass() != door.getClass()) {
             throw new IllegalArgumentException("device must be of class Door");
         }
 
-        Door typedDoor = (Door)door;
+        final Door typedDoor = (Door) door;
 
-        if(isEnabled() != typedDoor.isEnabled()) {
+        if (isEnabled() != typedDoor.isEnabled()) {
             return false;
         }
         return typedDoor.opened == opened;

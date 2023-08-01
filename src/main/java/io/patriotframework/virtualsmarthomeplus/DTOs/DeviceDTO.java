@@ -18,22 +18,27 @@ public class DeviceDTO {
      * Each device has unique label. Label represents id of the device.
      */
     @NotEmpty
-    public String label;
+    private String label;
     /**
      * Type of the device
      */
-    public String deviceType;
+    private String deviceType;
     /**
      * True if device is enabled
      */
-    public Boolean enabled;
+    private Boolean enabled;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!this.getDeviceType().equals(((DeviceDTO) o).getDeviceType())) return false;
-        DeviceDTO deviceDTO = (DeviceDTO) o;
-        return Objects.equals(label, deviceDTO.label) && Objects.equals(enabled, deviceDTO.enabled);
+        if (!(o instanceof final DeviceDTO deviceDTO)) return false;
+        return Objects.equals(getLabel(), deviceDTO.getLabel())
+                && Objects.equals(getDeviceType(), deviceDTO.getDeviceType())
+                && Objects.equals(getEnabled(), deviceDTO.getEnabled());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getLabel(), getDeviceType(), getEnabled());
     }
 }

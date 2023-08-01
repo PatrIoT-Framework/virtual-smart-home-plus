@@ -8,7 +8,13 @@ import io.patriotframework.virtualsmarthomeplus.house.House;
 import io.patriotframework.virtualsmarthomeplus.house.devices.finalDevices.Fireplace;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
@@ -66,10 +72,15 @@ public class FireplaceController extends FinalDeviceHandling {
      *
      * @param device     updated fireplace DTO
      * @param apiVersion api version specified in route
+     * @param label label of the device to be created
      * @return fireplace updated or added to the house
      */
     @PutMapping(FIREPLACE_ID_ROUTE)
-    public DeviceDTO putFireplace(@Valid @RequestBody FireplaceDTO device, @NotNull @PathVariable String label, @PathVariable String apiVersion) {
+    public DeviceDTO putFireplace(
+            @Valid @RequestBody FireplaceDTO device,
+            @NotNull @PathVariable String label,
+            @PathVariable String apiVersion
+    ) {
         if (apiVersion.equals(APIVersions.V0_1)) {
             return handlePut(label, device);
         }
@@ -86,7 +97,10 @@ public class FireplaceController extends FinalDeviceHandling {
      * @return "OK" if fireplace exists in the house and was deleted
      */
     @DeleteMapping(FIREPLACE_ID_ROUTE)
-    public ResponseEntity<HttpStatus> deleteFireplace(@NotNull @PathVariable String label, @PathVariable String apiVersion) {
+    public ResponseEntity<HttpStatus> deleteFireplace(
+            @NotNull @PathVariable String label,
+            @PathVariable String apiVersion
+    ) {
         if (apiVersion.equals(APIVersions.V0_1)) {
             handleDelete(label, Fireplace.class);
 

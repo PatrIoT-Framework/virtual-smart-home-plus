@@ -13,17 +13,18 @@ public class ActuatorDTO extends DeviceDTO {
     /**
      * True if actuator is switched on
      */
-    public Boolean switchedOn;
+    private Boolean switchedOn;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ActuatorDTO that = (ActuatorDTO) o;
-        if (!super.equals(o)) {
-            return false;
-        }
-        return Objects.equals(switchedOn, that.switchedOn);
+        if (!(o instanceof final ActuatorDTO that)) return false;
+        if (!super.equals(o)) return false;
+        return Objects.equals(getSwitchedOn(), that.getSwitchedOn());
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getSwitchedOn());
+    }
 }

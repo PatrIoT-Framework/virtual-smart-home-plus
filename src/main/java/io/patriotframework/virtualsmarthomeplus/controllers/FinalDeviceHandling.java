@@ -60,7 +60,7 @@ public class FinalDeviceHandling {
             throw new KeyAlreadyExistsException();
         }
 
-        RGBLight rgbLight = new RGBLight(device.getLabel());
+        final RGBLight rgbLight = new RGBLight(device.getLabel());
         house.addDevice(rgbLight);
         rgbLight.update(device);
 
@@ -71,22 +71,22 @@ public class FinalDeviceHandling {
      * Serving method for put requests on the final device.
      *
      * @param device device to update or add to the house
-     * @param label label of the device to be updated
+     * @param label  label of the device to be updated
      * @return updated device DTO of specified class with given label if present in the house
      * @throws IllegalArgumentException if label is null
-     * @throws NoSuchElementException if device we want to update is not in the house
+     * @throws NoSuchElementException   if device we want to update is not in the house
      */
     public DeviceDTO handlePut(String label, DeviceDTO device)
             throws IllegalArgumentException, NoSuchElementException {
-        if(device==null) throw new IllegalArgumentException();
+        if (device == null) throw new IllegalArgumentException();
         Device deviceToUpdate = house
                 .getDeviceOfType(dtoMapper.mapDtoClassType(device.getClass()), label);
         if (deviceToUpdate == null) {
-            RGBLight rgbLight = new RGBLight(device.getLabel());
+            final RGBLight rgbLight = new RGBLight(device.getLabel());
             deviceToUpdate = rgbLight;
             house.addDevice(rgbLight);
         }
-            deviceToUpdate.update(device);
+        deviceToUpdate.update(device);
 
         if (!label.equals(deviceToUpdate.getLabel())) {
             house.removeDevice(label);
@@ -103,7 +103,10 @@ public class FinalDeviceHandling {
      * @param deviceClass class of the device requested to delete
      * @throws NoSuchElementException if required device is not in house
      */
-    public void handleDelete(String label, Class<? extends Device> deviceClass) throws NoSuchElementException, IllegalArgumentException {
+    public void handleDelete(
+            String label,
+            Class<? extends Device> deviceClass
+    ) throws NoSuchElementException, IllegalArgumentException {
         final Device retrievedDevice = house.getDeviceOfType(deviceClass, label);
 
         if (retrievedDevice == null) {

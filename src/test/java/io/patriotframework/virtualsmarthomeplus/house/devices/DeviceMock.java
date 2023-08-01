@@ -1,8 +1,6 @@
 package io.patriotframework.virtualsmarthomeplus.house.devices;
 
 
-import io.patriotframework.virtualsmarthomeplus.house.devices.Device;
-
 public class DeviceMock extends Device {
 
     public DeviceMock(String label) {

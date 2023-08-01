@@ -26,10 +26,11 @@ import java.util.stream.Collectors;
 public class DeviceController {
     private static final String DEVICE_ID_ROUTE = APIRoutes.DEVICE_ROUTE + "{label}";
     private final House house;
-
+    private final DTOMapper dtoMapper;
     @Autowired
     public DeviceController(House house) {
         this.house = house;
+        dtoMapper = new DTOMapper(new ModelMapper());
     }
 
     /**
@@ -41,11 +42,10 @@ public class DeviceController {
     @GetMapping(APIRoutes.DEVICE_ROUTE)
     public ResponseEntity<ArrayList<DeviceDTO>> getDevices(@PathVariable String apiVersion) {
         if (apiVersion.equals(APIVersions.V0_1)) {
-            DTOMapper dtoMapper = new DTOMapper(new ModelMapper());
             return new ResponseEntity<>(new ArrayList<>((house.getDevicesOfType(Device.class)
                     .stream()
                     .map(dtoMapper::map)
-                    .collect(Collectors.toList()))),HttpStatus.OK);
+                    .collect(Collectors.toList()))), HttpStatus.OK);
         }
 
         throw new ResponseStatusException(
@@ -63,8 +63,7 @@ public class DeviceController {
     @GetMapping(DEVICE_ID_ROUTE)
     public DeviceDTO getDevice(@PathVariable String label, @PathVariable String apiVersion) {
         if (apiVersion.equals(APIVersions.V0_1)) {
-            DTOMapper dtoMapper = new DTOMapper(new ModelMapper());
-            DeviceDTO retrievedDevice = dtoMapper.map(house.getDevice(label));
+            final DeviceDTO retrievedDevice = dtoMapper.map(house.getDevice(label));
             if (retrievedDevice == null) {
                 throw new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "device with given label not found" // 404

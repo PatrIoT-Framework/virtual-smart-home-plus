@@ -14,10 +14,10 @@ import org.slf4j.LoggerFactory;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class Fireplace extends Device {
 
-    private Boolean onFire = false;
-    private static final Logger LOGGER = LoggerFactory.getLogger(House.class);
     public static final String ON_FIRE = "on_fire";
     public static final String EXTINGUISHED = "extinguished";
+    private static final Logger LOGGER = LoggerFactory.getLogger(House.class);
+    private Boolean onFire = false;
 
     /**
      * Creates new fireplace with given label.
@@ -34,7 +34,7 @@ public class Fireplace extends Device {
      * Label of the new fireplace is given by parameter.
      *
      * @param origFireplace new fireplace copies values of given fireplace
-     * @param newLabel   label creates identity of the fireplace and is compared in the equals method
+     * @param newLabel      label creates identity of the fireplace and is compared in the equals method
      * @throws IllegalArgumentException if given label is null or blank
      */
     public Fireplace(Fireplace origFireplace, String newLabel) {
@@ -46,7 +46,7 @@ public class Fireplace extends Device {
      * Fires up the fireplace.
      */
     public void fireUp() {
-        if(!onFire) {
+        if (!onFire) {
             onFire = true;
             LOGGER.debug(String.format("Fireplace %s fired up", getLabel()));
         }
@@ -56,7 +56,7 @@ public class Fireplace extends Device {
      * Extinguishes the fireplace.
      */
     public void extinguish() {
-        if(onFire) {
+        if (onFire) {
             onFire = false;
             LOGGER.debug(String.format("Fireplace %s extinguished", getLabel()));
         }
@@ -85,16 +85,16 @@ public class Fireplace extends Device {
      */
     @Override
     public boolean hasSameAttributes(Device fireplace) throws IllegalArgumentException {
-        if(fireplace == null) {
+        if (fireplace == null) {
             throw new IllegalArgumentException("Fireplace cannot be null");
         }
-        if(getClass() != fireplace.getClass()) {
+        if (getClass() != fireplace.getClass()) {
             throw new IllegalArgumentException("device must be of class Fireplace");
         }
 
-        Fireplace typedFireplace = (Fireplace)fireplace;
+        final Fireplace typedFireplace = (Fireplace) fireplace;
 
-        if(isEnabled() != typedFireplace.isEnabled()) {
+        if (isEnabled() != typedFireplace.isEnabled()) {
             return false;
         }
         return typedFireplace.onFire == onFire;

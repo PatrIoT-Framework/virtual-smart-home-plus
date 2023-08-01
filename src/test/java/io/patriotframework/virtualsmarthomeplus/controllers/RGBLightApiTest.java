@@ -1,6 +1,5 @@
 package io.patriotframework.virtualsmarthomeplus.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.patriotframework.virtualsmarthomeplus.DTOs.DeviceDTO;
 import io.patriotframework.virtualsmarthomeplus.DTOs.RGBLightDTO;
@@ -114,7 +113,7 @@ public class RGBLightApiTest {
                         .content(objectMapper.writeValueAsString(rgb))
                 )
                 .andExpect(status().isOk());
-        RGBLightDTO rgbLightDTO2 =  (RGBLightDTO) dtoMaper.map(house.getDevice("rgb1"));
+        RGBLightDTO rgbLightDTO2 = (RGBLightDTO) dtoMaper.map(house.getDevice("rgb1"));
         assertEquals(rgbLightDTO2.getRed(), 25);
         assertEquals(rgbLightDTO2.getBlue(), 0);
 
@@ -161,7 +160,7 @@ public class RGBLightApiTest {
                         .content(objectMapper.writeValueAsString(rgb))
                 )
                 .andExpect(status().isOk());
-        rgbLightDTO2 =  (RGBLightDTO) dtoMaper.map(house.getDevice("2"));
+        rgbLightDTO2 = (RGBLightDTO) dtoMaper.map(house.getDevice("2"));
         assertEquals(rgbLightDTO2.getRed(), 4);
         assertEquals(rgbLightDTO2.getBlue(), 40);
         assertEquals(rgbLightDTO2.getGreen(), 40);
@@ -179,6 +178,7 @@ public class RGBLightApiTest {
                 .andExpect(status().is2xxSuccessful())
                 .andReturn();
     }
+
     @Test
     public void errorShouldOccur() throws Exception {
         RGBLightDTO rgb = new RGBLightDTO();
