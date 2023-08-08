@@ -3,12 +3,12 @@ package io.patriotframework.virtualsmarthomeplus.controllers;
 import io.patriotframework.virtualsmarthomeplus.APIRoutes;
 import io.patriotframework.virtualsmarthomeplus.APIVersions;
 import io.patriotframework.virtualsmarthomeplus.DTOs.DeviceDTO;
-import io.patriotframework.virtualsmarthomeplus.DTOs.DoorDTO;
+import io.patriotframework.virtualsmarthomeplus.DTOs.ThermometerDTO;
 import io.patriotframework.virtualsmarthomeplus.house.House;
-import io.patriotframework.virtualsmarthomeplus.house.devices.finalDevices.Door;
+import io.patriotframework.virtualsmarthomeplus.house.devices.finalDevices.Thermometer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -16,97 +16,97 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-
-/**
- * Handles the POST, GET, PUT and DELETE requests on Door route: {@link APIRoutes#DOOR_ROUTE}
- */
 @RestController
-public class DoorController extends FinalDeviceHandling {
-    private static final String DOOR_ID_ROUTE = APIRoutes.DOOR_ROUTE + "{label}";
+public class ThermometerController extends FinalDeviceHandling {
+    public static final String THERMOMETER_ID_ROUTE = APIRoutes.THERMOMETER_ROUTE + "{label}";
 
-    DoorController(House house) {
+    public static final String THERMOMETER_GET_TEMPERATURE = THERMOMETER_ID_ROUTE + "/getTemperature";
+
+    public static final String THERMOMETER_GET_UNIT = THERMOMETER_ID_ROUTE + "/getUnit";
+
+    public static final String THERMOMETER_SET_UNIT = THERMOMETER_ID_ROUTE + "/setUnit";
+
+    @Autowired
+    ThermometerController(House house) {
         super(house);
     }
 
     /**
-     * Returns the door
+     * Returns the thermometer
      *
      * @param label      label specified in route
      * @param apiVersion api version specified in route
-     * @return door if present in the house
+     * @return thermometer if present in the house
      */
-    @GetMapping(DOOR_ID_ROUTE)
-    public ResponseEntity<DeviceDTO> getDoor(@NotNull @PathVariable String label, @PathVariable String apiVersion) {
+    @GetMapping(THERMOMETER_ID_ROUTE)
+    public DeviceDTO getThermometer(@PathVariable String label, @PathVariable String apiVersion) {
         if (apiVersion.equals(APIVersions.V0_1)) {
-            return new ResponseEntity<>(handleGet(label, Door.class), HttpStatus.OK);
+            return handleGet(label, Thermometer.class);
         }
-
         throw new ResponseStatusException(
                 HttpStatus.NOT_FOUND, String.format("Unknown api version: %s", apiVersion) // 404
         );
     }
 
     /**
-     * Creates the door
+     * Creates the thermometer
      *
-     * @param device     new door
+     * @param device     new thermometer DTO
      * @param apiVersion api version specified in route
-     * @return door added to the house
+     * @return thermometer added to the house
      */
-    @PostMapping(APIRoutes.DOOR_ROUTE)
-    public ResponseEntity<DeviceDTO> postDoor(
-            @Valid @RequestBody DoorDTO device,
-            @NotNull @PathVariable String apiVersion
-    ) {
+    @PostMapping(APIRoutes.THERMOMETER_ROUTE)
+    public DeviceDTO postThermometer(
+            @RequestBody ThermometerDTO device,
+            @PathVariable String apiVersion) {
         if (apiVersion.equals(APIVersions.V0_1)) {
-            return new ResponseEntity<>(handlePost(device), HttpStatus.OK);
+            return handlePost(device);
         }
-
         throw new ResponseStatusException(
                 HttpStatus.NOT_FOUND, String.format("Unknown api version: %s", apiVersion) // 404
         );
     }
 
     /**
-     * Updates or creates the door
+     * Updates or creates the thermometer
      *
-     * @param device     updated door
-     * @param apiVersion api version specified in route
-     * @param label label of the new device
-     * @return door updated or added to the house
+     * @param thermometer updated thermometer DTO
+     * @param apiVersion  api version specified in route
+     * @param label label of the thermometer to be updated
+     * @return thermometer updated or added to the house
      */
-    @PutMapping(DOOR_ID_ROUTE)
-    public ResponseEntity<DeviceDTO> putDoor(
-            @Valid @RequestBody DoorDTO device,
+    @PutMapping(THERMOMETER_ID_ROUTE)
+    public DeviceDTO putThermometer(
+            @RequestBody ThermometerDTO thermometer,
             @NotNull @PathVariable String label,
             @PathVariable String apiVersion
     ) {
         if (apiVersion.equals(APIVersions.V0_1)) {
-            return new ResponseEntity<>(handlePut(label, device), HttpStatus.OK);
+            return handlePut(label, thermometer);
         }
-
         throw new ResponseStatusException(
                 HttpStatus.NOT_FOUND, String.format("Unknown api version: %s", apiVersion) // 404
         );
     }
 
     /**
-     * Deletes the door
+     * Deletes the thermometer
      *
-     * @param label      label of the door to be deleted
+     * @param label      label of the thermometer to be deleted
      * @param apiVersion api version specified in route
-     * @return "OK" if door exists in the house and was deleted
+     * @return "OK" if thermometer exists in the house and was deleted
      */
-    @DeleteMapping(DOOR_ID_ROUTE)
-    public ResponseEntity<HttpStatus> deleteDoor(@NotNull @PathVariable String label, @PathVariable String apiVersion) {
+    @DeleteMapping(THERMOMETER_ID_ROUTE)
+    public ResponseEntity<HttpStatus> deleteThermometer(
+            @NotNull @PathVariable String label,
+            @PathVariable String apiVersion
+    ) {
         if (apiVersion.equals(APIVersions.V0_1)) {
-            handleDelete(label, Door.class);
+            handleDelete(label, Thermometer.class);
 
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
