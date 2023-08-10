@@ -5,13 +5,11 @@ import io.patriotframework.virtualsmarthomeplus.APIVersions;
 import io.patriotframework.virtualsmarthomeplus.DTOs.HouseDTO;
 import io.patriotframework.virtualsmarthomeplus.Mapper.DTOMapper;
 import io.patriotframework.virtualsmarthomeplus.house.House;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-
 
 
 /**
@@ -31,9 +29,10 @@ public class HouseController {
 
     /**
      * Serving method for get requests on the house.
+     *
      * @param apiVersion used api version
-     * @throws ResponseStatusException 404 if invalid API version is demanded
      * @return house with it`s devices
+     * @throws ResponseStatusException 404 if invalid API version is demanded
      */
     @GetMapping(APIRoutes.HOUSE_ROUTE)
     public HouseDTO getHouse(@PathVariable String apiVersion) {
