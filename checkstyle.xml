@@ -28,16 +28,16 @@
         <!-- See https://checkstyle.sourceforge.io/config_javadoc.html -->
         <module name="JavadocMethod">
             <property name="accessModifiers" value="public"/>
-            <property name="severity" value="warning" />
+            <property name="severity" value="warning"/>
         </module>
         <module name="JavadocType">
             <property name="scope" value="public"/>
-            <property name="severity" value="warning" />
+            <property name="severity" value="warning"/>
         </module>
         <module name="JavadocStyle">
             <property name="scope" value="public"/>
             <property name="checkFirstSentence" value="false"/>
-            <property name="severity" value="warning" />
+            <property name="severity" value="warning"/>
         </module>
 
         <!-- Checks for import related problems.                       -->
@@ -116,13 +116,13 @@
         <module name="ArrayTypeStyle"/>
         <module name="CommentsIndentation"/>
         <module name="Indentation">
-            <property name="basicOffset" value="8"/>
+            <property name="basicOffset" value="4"/>
         </module>
     </module>
 
     <!-- Checks whether files end with a new line.                        -->
     <!-- See http://checkstyle.sf.net/config_misc.html#NewlineAtEndOfFile -->
-    <module name="NewlineAtEndOfFile" />
+    <module name="NewlineAtEndOfFile"/>
 
     <!-- Checks for Size Violations.                    -->
     <!-- See http://checkstyle.sf.net/config_sizes.html -->

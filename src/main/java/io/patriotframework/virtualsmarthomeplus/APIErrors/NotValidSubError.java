@@ -13,22 +13,23 @@ public class NotValidSubError extends APISubError {
     /**
      * object name
      */
-    private String object;
+    private final String object;
     /**
      * field where the error occurs
      */
-    private String field;
+    private final String field;
     /**
      * rejected value
      */
-    private Object rejectedValue;
+    private final Object rejectedValue;
     /**
      * default message what causes the error
      */
-    private String message;
+    private final String message;
 
     /**
      * Creates instance of NotValidSubError with initialized attributes. Values are parsed from FieldError
+     *
      * @param fieldError instance of FieldError
      */
     public NotValidSubError(FieldError fieldError) {
